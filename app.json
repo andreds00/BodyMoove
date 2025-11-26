@@ -56,7 +56,8 @@
         {
           "locationAlwaysAndWhenInUsePermission": "O app usa sua localização para encontrar locais próximos."
         }
-      ]
+      ],
+      "react-native-health-connect"
     ],
     "experiments": {
       "typedRoutes": true

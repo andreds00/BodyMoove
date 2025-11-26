@@ -15,7 +15,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialIcons } from "@expo/vector-icons";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { BleManager, Device } from "react-native-ble-plx";
+import { Device } from "react-native-ble-plx";
 import {
   activateKeepAwakeAsync,
   deactivateKeepAwake,
@@ -27,10 +27,8 @@ import BubbleScanner from "@/src/app/components/BubbleScanner";
 import { getStepsCaloriesActive } from "@/lib/healthConnect";
 
 // FUNÇÃO QUE LÊ QUALQUER CHARACTERISTIC (RAW)
-import { monitorRawCharacteristic } from "@/lib/bluetooth";
+import { monitorRawCharacteristic, isBleAvailable, getManager } from "@/lib/bluetooth";
 
-// BLE MANAGER
-const manager = new BleManager();
 let persistentDevice: Device | null = null;
 const setPersistentDevice = (d: Device | null) => (persistentDevice = d);
 const getPersistentDevice = () => persistentDevice;
@@ -52,6 +50,7 @@ const WATCH_BRANDS = [
 ];
 
 export default function MeusTreinos() {
+  const bleSupported = isBleAvailable();
   const [devices, setDevices] = useState<Device[]>([]);
   const [scanning, setScanning] = useState(false);
   const [connectedDevice, setConnectedDevice] = useState<Device | null>(
@@ -73,6 +72,14 @@ export default function MeusTreinos() {
 
   // ================= PERMISSÕES ANDROID =================
   const requestPermissions = async () => {
+    if (!bleSupported) {
+      Alert.alert(
+        "Bluetooth indisponível",
+        "Este build não possui suporte ao módulo react-native-ble-plx. Instale o app através de um build nativo ou dev client."
+      );
+      return false;
+    }
+
     if (Platform.OS !== "android") return true;
 
     try {
@@ -106,6 +113,7 @@ export default function MeusTreinos() {
       setConnectionStatus("connecting");
       setConnectingDeviceId(device.id);
 
+      const manager = getManager();
       await manager.stopDeviceScan();
       setScanning(false);
 
@@ -204,6 +212,7 @@ export default function MeusTreinos() {
       const dev = connectedDevice || getPersistentDevice();
       if (!dev) return;
 
+      const manager = getManager();
       await manager.cancelDeviceConnection(dev.id);
       manager.stopDeviceScan();
 
@@ -223,6 +232,9 @@ export default function MeusTreinos() {
     setDevices([]);
     setScanning(true);
 
+    if (!bleSupported) return;
+
+    const manager = getManager();
     manager.startDeviceScan(null, { allowDuplicates: false }, (error, device) => {
       if (error) {
         if (error.message.includes("powered off")) {
@@ -260,6 +272,7 @@ export default function MeusTreinos() {
     });
 
     setTimeout(() => {
+      const manager = getManager();
       manager.stopDeviceScan();
       setScanning(false);
     }, 10000);
@@ -304,6 +317,11 @@ export default function MeusTreinos() {
 
   // ================= INICIALIZAÇÃO =================
   useEffect(() => {
+    if (!bleSupported) {
+      setConnectionStatus("error");
+      return;
+    }
+
     if (Platform.OS === "android") {
       activateKeepAwakeAsync().catch(() => { });
     }
@@ -323,9 +341,12 @@ export default function MeusTreinos() {
       if (Platform.OS === "android") {
         deactivateKeepAwake().catch(() => { });
       }
+      if (bleSupported) {
+        const manager = getManager();
       manager.stopDeviceScan();
+      }
     };
-  }, []);
+  }, [bleSupported]);
 
   useEffect(() => {
     if (connectedDevice) {
@@ -505,6 +526,19 @@ export default function MeusTreinos() {
       </TouchableOpacity>
     </>
   );
+
+  if (!bleSupported) {
+    return (
+      <SafeAreaView style={{ flex: 1, justifyContent: "center", alignItems: "center", padding: 20 }}>
+        <Text style={{ fontSize: 18, color: colors.darkBlue, textAlign: "center", marginBottom: 12 }}>
+          Bluetooth indisponível neste build
+        </Text>
+        <Text style={{ color: colors.darkGray, textAlign: "center" }}>
+          Para usar a busca de relógios é necessário instalar o app via build nativo (expo run / EAS) ou um Dev Client com o módulo react-native-ble-plx.
+        </Text>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.white }}>

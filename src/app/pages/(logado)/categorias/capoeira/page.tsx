@@ -12,13 +12,13 @@ export default function ModalidadesCapoeira() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.container}>
-
         <LinearGradient
           style={styles.header}
           colors={[colors.darkBlue, colors.blue, colors.lightBlue]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
         >
+
           <TouchableOpacity activeOpacity={0.6} onPress={() => {router.back()}}>
             <MaterialIcons name="arrow-back-ios" size={24} color={colors.white} />
           </TouchableOpacity>
@@ -37,16 +37,26 @@ export default function ModalidadesCapoeira() {
 
 
           <View style={styles.options}>
-            <TouchableOpacity style={styles.button1} activeOpacity={0.6} onPress={() => { router }}>
+            <TouchableOpacity style={styles.button1} activeOpacity={0.6} onPress={() => { router.push({
+              pathname:'/pages/(logado)/categorias/capoeira/escolhas', 
+              params:{ atividade: 'capoeira-Angola' }}) }}>
+
               <Text style={styles.buttonText}> Capoeira Angola</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button2} activeOpacity={0.6} onPress={() => { }}>
+              <TouchableOpacity style={styles.button2} activeOpacity={0.6} onPress={() => { router.push({
+              pathname:'/pages/(logado)/categorias/capoeira/escolhas', 
+              params:{ atividade: 'capoeira-regional' }
+              }) }}>
               
               <Text style={styles.buttonText}> Capoeira Regional</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button3} activeOpacity={0.6} onPress={() => { }}>
+            <TouchableOpacity style={styles.button3} activeOpacity={0.6} onPress={() => { router.push({
+              pathname:'/pages/(logado)/categorias/capoeira/escolhas', 
+              params:{ atividade: 'capoeira-contemporânea' }
+              }) }}>
+
               <Text style={styles.buttonText}> Capoeira Contemporânea</Text>
             </TouchableOpacity>
           </View>

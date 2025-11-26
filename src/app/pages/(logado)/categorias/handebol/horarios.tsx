@@ -1,32 +1,68 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import {useRouter} from 'expo-router';
+import { useRouter, useLocalSearchParams, Link } from 'expo-router';
+import { LinearGradient } from 'expo-linear-gradient';
+import { MaterialIcons } from '@expo/vector-icons';
+import colors from '@/constants/Colors';
 
 export default function HorariosHandebol() {
-    const router = useRouter();
+  const router = useRouter();
+  const params = useLocalSearchParams<{ localNome?: string; localEndereco?: string }>();
+
   const horarios = [
-    { hora: '10h00', nivel: 'Avançado' },
-    { hora: '12h20', nivel: 'Iniciante' },
-    { hora: '14h30', nivel: 'Intermediário' },
-    { hora: '16h30', nivel: 'Intermediário' },
-    { hora: '17h40', nivel: 'Avançado' },
-    { hora: '19h30', nivel: 'Iniciante' },
+    { hora: '08h00', nivel: 'iniciante' },
+    { hora: '09h30', nivel: 'intermediário' },
+    { hora: '11h00', nivel: 'avançado' },
+    { hora: '14h00', nivel: 'intermediário' },
+    { hora: '16h30', nivel: 'iniciante' },
+    { hora: '19h00', nivel: 'avançado' },
   ];
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.local}>H10 Escola de Esportes</Text>
-        <Text style={styles.title}>E o seu melhor horário?</Text>
-      </View>
+      <LinearGradient
+        style={styles.header}
+        colors={[colors.darkBlue, colors.blue, colors.lightBlue]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 0 }}
+      >
+        <TouchableOpacity onPress={() => router.back()}>
+          <MaterialIcons name="arrow-back-ios" size={24} color={colors.white} />
+        </TouchableOpacity>
+        <Text style={styles.title}>Agende seu horário</Text>
+      </LinearGradient>
+
+      <Text style={styles.subtitle}>Escolha o melhor horário e nível da partida</Text>
+
+      {params.localNome && (
+        <View style={styles.localInfo}>
+          <Text style={styles.localLabel}>Quadra selecionada</Text>
+          <Text style={styles.localNome}>{params.localNome}</Text>
+          {!!params.localEndereco && <Text style={styles.localEndereco}>{params.localEndereco}</Text>}
+        </View>
+      )}
 
       <ScrollView contentContainerStyle={styles.options}>
         {horarios.map((item, index) => (
-          <TouchableOpacity key={index} style={styles.button}>
-            <Text style={styles.hora}>{item.hora}</Text>
-            <Text style={styles.nivel}>{item.nivel}</Text>
-          </TouchableOpacity>
+          <Link
+            key={`${item.hora}-${index}`}
+            href={{
+              pathname: '/pages/(logado)/categorias/handebol/confimacao/page',
+              params: {
+                localNome: params.localNome || 'Quadra não informada',
+                localEndereco: params.localEndereco || '',
+                horario: item.hora,
+                nivel: item.nivel,
+              },
+            }}
+            asChild
+          >
+            <TouchableOpacity style={styles.button}>
+              <Text style={styles.hora}>{item.hora}</Text>
+              <Text style={styles.nivel}>{item.nivel}</Text>
+            </TouchableOpacity>
+          </Link>
         ))}
       </ScrollView>
     </SafeAreaView>
@@ -36,45 +72,77 @@ export default function HorariosHandebol() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#003973',
-    paddingHorizontal: 20,
-    paddingTop: 40,
+    backgroundColor: colors.white,
   },
   header: {
-    marginBottom: 30,
+    flexDirection: 'row',
     alignItems: 'center',
-  },
-  local: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 10,
+    paddingHorizontal: 20,
+    paddingVertical: 18,
+    marginBottom: 12,
   },
   title: {
-    color: '#fff',
-    fontSize: 22,
-    fontWeight: 'bold',
+    flex: 1,
     textAlign: 'center',
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: colors.white,
+  },
+  subtitle: {
+    fontSize: 16,
+    color: colors.darkGray,
+    textAlign: 'center',
+    marginBottom: 12,
+    paddingHorizontal: 20,
+  },
+  localInfo: {
+    marginHorizontal: 20,
+    marginBottom: 12,
+    padding: 16,
+    backgroundColor: '#f0f4ff',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#d9e1ff',
+  },
+  localLabel: {
+    fontSize: 12,
+    color: colors.darkGray,
+    textTransform: 'uppercase',
+  },
+  localNome: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: colors.darkBlue,
+  },
+  localEndereco: {
+    fontSize: 13,
+    color: colors.darkGray,
+    marginTop: 4,
   },
   options: {
-    gap: 20,
+    paddingHorizontal: 20,
+    paddingBottom: 30,
+    gap: 14,
   },
   button: {
-    backgroundColor: '#fff',
-    paddingVertical: 20,
-    paddingHorizontal: 25,
-    borderRadius: 20,
-    alignItems: 'center',
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: '#d9e1ff',
+    paddingVertical: 14,
+    paddingHorizontal: 20,
+    backgroundColor: '#f8faff',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   hora: {
-    color: '#003973',
-    fontSize: 20,
-    fontWeight: '700',
+    color: colors.darkBlue,
+    fontSize: 18,
+    fontWeight: 'bold',
   },
   nivel: {
-    color: '#003973',
-    fontSize: 16,
-    marginTop: 5,
+    color: colors.darkGray,
+    fontSize: 14,
     textTransform: 'capitalize',
   },
 });
+

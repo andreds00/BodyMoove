@@ -37,16 +37,25 @@ export default function ModalidadesGinastica() {
 
 
           <View style={styles.options}>
-            <TouchableOpacity style={styles.button1} activeOpacity={0.6} onPress={() => { router.replace('/pages/(logado)/categorias/volei/informacoesfv') }}>
+            <TouchableOpacity style={styles.button1} activeOpacity={0.6} onPress={() => { router.replace({
+              pathname: '/pages/(logado)/categorias/ginastica/escolhas', 
+              params: { atividade: 'ginastica-artistica' },
+            }) }}>
               <Text style={styles.buttonText}> Ginástica Artística </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button2} activeOpacity={0.6} onPress={() => { }}>
+            <TouchableOpacity style={styles.button2} activeOpacity={0.6} onPress={() => { router.replace({
+              pathname: '/pages/(logado)/categorias/ginastica/escolhas', 
+              params: { atividade: 'ginastica-ritmica' },
+            }) }}>
               
               <Text style={styles.buttonText}>Ginástica Rítmica </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button3} activeOpacity={0.6} onPress={() => { }}>
+            <TouchableOpacity style={styles.button3} activeOpacity={0.6} onPress={() => { router.replace({
+              pathname: '/pages/(logado)/categorias/ginastica/escolhas', 
+              params: { atividade: 'hidroginastica' },
+            }) }}>
               <Text style={styles.buttonText}> Hidroginástica </Text>
             </TouchableOpacity>
 

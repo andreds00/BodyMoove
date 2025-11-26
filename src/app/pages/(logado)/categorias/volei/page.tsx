@@ -37,16 +37,36 @@ export default function ModalidadesVolei() {
 
 
           <View style={styles.options}>
-            <TouchableOpacity style={styles.button1} activeOpacity={0.6} onPress={() => { router}}>
+            <TouchableOpacity
+              style={styles.button1}
+              activeOpacity={0.6}
+              onPress={() => router.push({
+                pathname: '/pages/(logado)/categorias/volei/escolhasfv',
+                params: { atividade: 'volei-de-quadra' },
+              })}
+            >
               <Text style={styles.buttonText}> Vôlei de quadra</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button2} activeOpacity={0.6} onPress={() => { }}>
-              
+            <TouchableOpacity
+              style={styles.button2}
+              activeOpacity={0.6}
+              onPress={() => router.push({
+                pathname: '/pages/(logado)/categorias/volei/escolhasfv',
+                params: { atividade: 'volei-de-praia' },
+              })}
+            >
               <Text style={styles.buttonText}> Vôlei de praia</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button3} activeOpacity={0.6} onPress={() => { }}>
+            <TouchableOpacity
+              style={styles.button3}
+              activeOpacity={0.6}
+              onPress={() => router.push({
+                pathname: '/pages/(logado)/categorias/volei/escolhasfv',
+                params: { atividade: 'futevolei' },
+              })}
+            >
               <Text style={styles.buttonText}> Futevôlei</Text>
             </TouchableOpacity>
           </View>

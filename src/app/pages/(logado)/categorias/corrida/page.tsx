@@ -37,16 +37,25 @@ export default function ModalidadesCorrida() {
 
 
           <View style={styles.options}>
-            <TouchableOpacity style={styles.button1} activeOpacity={0.6} onPress={() => { router.replace('/pages/(logado)/categorias/volei/informacoesfv') }}>
+            <TouchableOpacity style={styles.button1} activeOpacity={0.6} onPress={() => { router.replace({
+              pathname: '/pages/(logado)/categorias/corrida/escolhas',
+              params: { atividade: 'corrida-rua' },
+            }) }}>
               <Text style={styles.buttonText}> Corrida de rua</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button2} activeOpacity={0.6} onPress={() => { }}>
+            <TouchableOpacity style={styles.button2} activeOpacity={0.6} onPress={() => { router.replace({
+              pathname: '/pages/(logado)/categorias/corrida/escolhas',
+              params: { atividade: 'corrida-pista' },
+            }) }}>
               
               <Text style={styles.buttonText}> Corrida de pista</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button3} activeOpacity={0.6} onPress={() => { }}>
+            <TouchableOpacity style={styles.button3} activeOpacity={0.6} onPress={() => { router.replace({
+              pathname: '/pages/(logado)/categorias/corrida/escolhas',
+              params: { atividade: 'ciclismo' },
+            }) }} >
               <Text style={styles.buttonText}> Ciclismo</Text>
             </TouchableOpacity>
           </View>

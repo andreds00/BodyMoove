@@ -37,11 +37,11 @@ export default function ModalidadesBeach() {
 
 
           <View style={styles.options}>
-            <TouchableOpacity style={styles.button1} activeOpacity={0.6} onPress={() => { router }}>
+            <TouchableOpacity style={styles.button1} activeOpacity={0.6} onPress={() => router.push('/pages/(logado)/categorias/tenis/escolhas')}>
               <Text style={styles.buttonText}>Em Dupla </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button2} activeOpacity={0.6} onPress={() => { }}>
+            <TouchableOpacity style={styles.button2} activeOpacity={0.6} onPress={() => router.push('/pages/(logado)/categorias/tenis/escolhas')}>
               
               <Text style={styles.buttonText}>Individual </Text>
             </TouchableOpacity>

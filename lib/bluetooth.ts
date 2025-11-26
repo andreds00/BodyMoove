@@ -2,15 +2,37 @@
 import { BleManager, Device, Subscription } from "react-native-ble-plx";
 import { Buffer } from "buffer";
 
-const manager = new BleManager();
+let manager: BleManager | null = null;
+
+try {
+  manager = new BleManager();
+} catch (err) {
+  console.warn(
+    "BLE Manager initialization failed. This build might be missing the native module react-native-ble-plx.",
+    err
+  );
+}
+
 let monitorSubscription: Subscription | null = null;
 let connectedDevice: Device | null = null;
 
-export const getManager = () => manager;
+const ensureManager = () => {
+  if (!manager) {
+    throw new Error(
+      "Bluetooth não disponível neste build. Use um dev client ou build nativo com react-native-ble-plx."
+    );
+  }
+  return manager;
+};
+
+export const isBleAvailable = () => manager !== null;
+
+export const getManager = () => ensureManager();
 
 export async function startScan(onDeviceFound: (d: Device) => void, timeout = 10000) {
+  const mgr = ensureManager();
   // limpa lista do caller; aqui só start scan
-  manager.startDeviceScan(null, { allowDuplicates: false }, (error, device) => {
+  mgr.startDeviceScan(null, { allowDuplicates: false }, (error, device) => {
     if (error) {
       console.warn("BLE scan error:", error);
       return;
@@ -25,12 +47,14 @@ export async function startScan(onDeviceFound: (d: Device) => void, timeout = 10
 }
 
 export async function stopScan() {
-  try { manager.stopDeviceScan(); } catch (e) {}
+  const mgr = ensureManager();
+  try { mgr.stopDeviceScan(); } catch (e) {}
 }
 
 export async function connectToDevice(deviceId: string) {
+  const mgr = ensureManager();
   try {
-    const device = await manager.connectToDevice(deviceId, { requestMTU: 517 });
+    const device = await mgr.connectToDevice(deviceId, { requestMTU: 517 });
     await device.discoverAllServicesAndCharacteristics();
     connectedDevice = device;
     return device;
@@ -41,6 +65,7 @@ export async function connectToDevice(deviceId: string) {
 }
 
 export async function disconnectCurrentDevice() {
+  const mgr = ensureManager();
   try {
     if (!connectedDevice) return;
     // remove monitor subscription antes de desconectar
@@ -48,7 +73,7 @@ export async function disconnectCurrentDevice() {
       try { monitorSubscription.remove(); } catch {}
       monitorSubscription = null;
     }
-    await manager.cancelDeviceConnection(connectedDevice.id);
+    await mgr.cancelDeviceConnection(connectedDevice.id);
     connectedDevice = null;
   } catch (err) {
     console.warn("Erro ao desconectar:", err);
@@ -106,7 +131,8 @@ export async function destroyManager() {
       try { monitorSubscription.remove(); } catch {}
       monitorSubscription = null;
     }
-    manager.destroy();
+    const mgr = ensureManager();
+    mgr.destroy();
   } catch (e) {
     // ignore
   }

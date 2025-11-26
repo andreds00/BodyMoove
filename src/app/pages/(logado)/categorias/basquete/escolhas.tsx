@@ -47,105 +47,73 @@ type ActivityConfig = {
 };
 
 const ACTIVITIES: Record<string, ActivityConfig> = {
-  'ginastica-artistica': {
-    title: 'Ginástica Artística',
+  'basquete-5x5': {
+    title: 'Basquete 5x5',
     description:
-      'Estúdios com aulas de ginástica artística para todas as idades e níveis.',
-    query: 'ginástica artística|centro ginastica|ginastica para crianças',
+      'Encontre quadras próximas e instrutores especializados em basquete 5x5 para aprimorar suas habilidades.',
+    query: 'Basquete 5x5|quadra de basquete|aula de basquete',
     fallback: [
       {
-        id: 'studio-sunset',
-        name: 'Studio Sunset',
+        id: 'basquete-center',
+        name: 'Basquete Center',
         address: 'Rua das Palmeiras, 145 - Centro',
-        highlight: 'Aulas para crianças e adultos.',
+        highlight: 'Aulas para todas as idades e níveis.',
         extra: 'Abre às 07h',
         location: { lat: -23.5635, lng: -46.6549 },
       },
       {
-        id: 'espaco-artemis',
-        name: 'Espaço Artemis',
-        address: 'Av. das Nações, 300 - Bairro Novo',
-        highlight: 'Aulas para todas as idades e níveis.',
+        id: 'espaco-do-basquete',
+        name: 'Espaço do Basquete',
+        address: 'Av. Paulista, 2000 - Bela Vista',
+        highlight: 'Treinamento com foco em performance.',
         extra: 'Instrutores certificados',
         location: { lat: -23.5478, lng: -46.6363 },
       },
       {
-        id: 'experience-gyms',
-        name: 'Experience Gyms',
-        address: 'Rua do Comércio, 220 - Centro',
-        highlight: 'Aulas de ginástica artística e acrobacias.',
+        id: 'bascas-street',
+        name: 'Bascas Street',
+        address: ' Rua Augusta, 300 - Consolação',
+        highlight: 'Quadras ao ar livre no coração da cidade.',
         extra: 'Agenda flexível',
         location: { lat: -23.5672, lng: -46.6429 },
       },
     ],
   },
- 'ginastica-ritmica': {
-    title: 'Ginástica Rítmica',
+  'basquete-3x3': {
+    title: 'Basquete 3x3',
     description:
-      'Estúdios com aulas de ginástica rítmica para todas as idades e níveis.',
-    query: 'ginástica rítmica|estudio ginastica ritmica|aula de ginastica ritmica',
+      'Descubra quadras próximas e instrutores especializados em basquete 3x3 para aprimorar suas habilidades.',
+    query: 'Basquete 3x3|quadra de basquete 3x3|aula de basquete 3x3',
     fallback: [
       {
-        id: 'ginastica-ritmica-center',
-        name: 'Ginástica Rítmica Center',
-        address: 'Rua das Flores, 250 - Jardim das Acácias',
-        highlight: 'Aulas para iniciantes e avançados.',
+        id: 'quadra-zen',
+        name: 'Quadra Zen',
+        address: 'Rua das Flores, 123 - Jardim das Acácias',
+        highlight: 'Aulas ao ar livre em ambiente tranquilo.',
         extra: 'Primeira aula experimental',
         location: { lat: -23.6001, lng: -46.6673 },
       },
       {
-        id: 'ritmica-fit',
-        name: 'Rítmica Fit Studio',
-        address: 'Av. Paulista, 1500 - Bela Vista',
-        highlight: 'Aulas para todas as idades.',
+        id: 'ginasio-esportivo',
+        name: 'Ginásio Esportivo',
+        address: 'Av. Liberdade, 456 - Centro',
+        highlight: 'Treinamento intensivo com foco em performance.',
         extra: 'Planos mensais',
         location: { lat: -23.5704, lng: -46.6582 },
       },
       {
-        id: 'studio-ritmica',
-        name: 'Studio Rítmica',
-        address: 'Rua do Sol, 75 - Centro',
-        highlight: 'Aulas de ginástica rítmica e dança.',
-        extra: 'Instrutores experientes',
+        id: 'basquete-club',
+        name: 'Basquete Club',
+        address: 'Rua do Sol, 789 - Vila Nova',
+        highlight: 'Treinamento para todas as idades e níveis.',
+        extra: 'Estacionamento próprio',
         location: { lat: -23.5712, lng: -46.6789 },
       },
     ],
-  },
-  hidroginástica: {
-    title: 'Hidroginástica',
-    description:
-      'Estúdios com aulas de hidroginástica para todas as idades e níveis.',
-    query: 'hidroginástica|aula de hidroginástica|ginastica na água',
-    fallback: [
-      {
-        id: 'aqua-fit',
-        name: 'Aqua Fit',
-        address: 'Rua das Acácias, 12 - Centro',
-        highlight: 'Aulas de hidroginástica para todas as idades.',
-        extra: 'Formato híbrido',
-        location: { lat: -23.5558, lng: -46.6396 },
-      },
-      {
-        id: 'hydro-health',
-        name: 'Hydro Health',
-        address: 'Rua Horizonte, 410 - Zona Norte',
-        highlight: 'Sessões de hidroginástica e reabilitação.',
-        extra: 'Sábados de imersão',
-        location: { lat: -23.5294, lng: -46.6499 },
-      },
-      {
-        id: 'splash-gym',
-        name: 'Splash Gym',
-        address: 'Av. Central, 1500 - Centro',
-        highlight: 'Aulas de hidroginástica para todos os níveis.',
-        extra: 'Equipe multidisciplinar',
-        location: { lat: -23.5505, lng: -46.6333 },
-      },
-    ],
-  },
+  }
 };
 
-const DEFAULT_ACTIVITY = 'hidroginastica';
+const DEFAULT_ACTIVITY = 'basquete-5x5';
 const GOOGLE_KEY = 'AIzaSyCjqzmGElJkuDPEDVQQNqsOb-edZYauSto';
 
 export default function LocaisMeditacao() {
@@ -320,7 +288,7 @@ export default function LocaisMeditacao() {
               style={styles.card}
               onPress={() => {
                 router.push({
-                  pathname: '/pages/(logado)/categorias/ginastica/horarios',
+                  pathname: '/pages/(logado)/categorias/basquete/horarios',
                   params: {
                     localNome: place.name,
                     localEndereco: place.address,

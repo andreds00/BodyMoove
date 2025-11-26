@@ -47,105 +47,73 @@ type ActivityConfig = {
 };
 
 const ACTIVITIES: Record<string, ActivityConfig> = {
-  'ginastica-artistica': {
-    title: 'Ginástica Artística',
+  'tenis-em-dupla': {
+    title: 'Tenis em Dupla',
     description:
-      'Estúdios com aulas de ginástica artística para todas as idades e níveis.',
-    query: 'ginástica artística|centro ginastica|ginastica para crianças',
+      'Locais com quadras de tênis para jogos em dupla, com instrutores disponíveis.',
+    query: 'quadras de tênis|tênis em dupla|instrutores de tênis',
     fallback: [
       {
-        id: 'studio-sunset',
-        name: 'Studio Sunset',
-        address: 'Rua das Palmeiras, 145 - Centro',
-        highlight: 'Aulas para crianças e adultos.',
-        extra: 'Abre às 07h',
+        id: 'quadra-top-spin',
+        name: 'Quadra Top Spin',
+        address: 'Rua das Palmeiras, 123 - Centro',
+        highlight: 'Aulas para todos os níveis.',
+        extra: 'Abre às 10h',
         location: { lat: -23.5635, lng: -46.6549 },
       },
       {
-        id: 'espaco-artemis',
-        name: 'Espaço Artemis',
-        address: 'Av. das Nações, 300 - Bairro Novo',
-        highlight: 'Aulas para todas as idades e níveis.',
-        extra: 'Instrutores certificados',
+        id: 'raquetes-e-cia',
+        name: 'Raquetes & Cia',
+        address: 'Av. dos Esportes, 456 - Jardim das Flores',
+        highlight: 'Instrutores certificados para jogos em dupla.',
+        extra: 'Planos mensais',
         location: { lat: -23.5478, lng: -46.6363 },
       },
       {
-        id: 'experience-gyms',
-        name: 'Experience Gyms',
-        address: 'Rua do Comércio, 220 - Centro',
-        highlight: 'Aulas de ginástica artística e acrobacias.',
+        id: 'bolas-e-aces',
+        name: 'Bolas & Aces',
+        address: 'Rua do Progresso, 200 - Zona Leste',
+        highlight: 'Quadras modernas com iluminação noturna.',
         extra: 'Agenda flexível',
         location: { lat: -23.5672, lng: -46.6429 },
       },
     ],
   },
- 'ginastica-ritmica': {
-    title: 'Ginástica Rítmica',
+  individual: {
+    title: 'Tenis Individual',
     description:
-      'Estúdios com aulas de ginástica rítmica para todas as idades e níveis.',
-    query: 'ginástica rítmica|estudio ginastica ritmica|aula de ginastica ritmica',
+      'Locais com quadras de tênis para jogos individuais, com instrutores disponíveis.',
+    query: 'quadras de tênis|tênis individual|instrutores de tênis',
     fallback: [
       {
-        id: 'ginastica-ritmica-center',
-        name: 'Ginástica Rítmica Center',
-        address: 'Rua das Flores, 250 - Jardim das Acácias',
-        highlight: 'Aulas para iniciantes e avançados.',
+        id: 'solo-spin',
+        name: 'Solo Spin',
+        address: 'Rua Itaúna, 50 - Zona Sul',
+        highlight: 'Aulas individuais personalizadas.',
         extra: 'Primeira aula experimental',
         location: { lat: -23.6001, lng: -46.6673 },
       },
       {
-        id: 'ritmica-fit',
-        name: 'Rítmica Fit Studio',
-        address: 'Av. Paulista, 1500 - Bela Vista',
-        highlight: 'Aulas para todas as idades.',
+        id: 'tacos-e-aces',
+        name: 'Tacos & Aces',
+        address: 'Rua Orquídeas, 301 - Alto da Colina',
+        highlight: 'Instrutores especializados em jogos individuais.',
         extra: 'Planos mensais',
         location: { lat: -23.5704, lng: -46.6582 },
       },
       {
-        id: 'studio-ritmica',
-        name: 'Studio Rítmica',
-        address: 'Rua do Sol, 75 - Centro',
-        highlight: 'Aulas de ginástica rítmica e dança.',
-        extra: 'Instrutores experientes',
+        id: 'power-tennis',
+        name: 'Power Tennis',
+        address: 'Av. Brasil, 450 - Centro',
+        highlight: 'Instrutores especializados em jogos individuais.',
+        extra: 'Estacionamento próprio',
         location: { lat: -23.5712, lng: -46.6789 },
       },
     ],
-  },
-  hidroginástica: {
-    title: 'Hidroginástica',
-    description:
-      'Estúdios com aulas de hidroginástica para todas as idades e níveis.',
-    query: 'hidroginástica|aula de hidroginástica|ginastica na água',
-    fallback: [
-      {
-        id: 'aqua-fit',
-        name: 'Aqua Fit',
-        address: 'Rua das Acácias, 12 - Centro',
-        highlight: 'Aulas de hidroginástica para todas as idades.',
-        extra: 'Formato híbrido',
-        location: { lat: -23.5558, lng: -46.6396 },
-      },
-      {
-        id: 'hydro-health',
-        name: 'Hydro Health',
-        address: 'Rua Horizonte, 410 - Zona Norte',
-        highlight: 'Sessões de hidroginástica e reabilitação.',
-        extra: 'Sábados de imersão',
-        location: { lat: -23.5294, lng: -46.6499 },
-      },
-      {
-        id: 'splash-gym',
-        name: 'Splash Gym',
-        address: 'Av. Central, 1500 - Centro',
-        highlight: 'Aulas de hidroginástica para todos os níveis.',
-        extra: 'Equipe multidisciplinar',
-        location: { lat: -23.5505, lng: -46.6333 },
-      },
-    ],
-  },
+  }
 };
 
-const DEFAULT_ACTIVITY = 'hidroginastica';
+const DEFAULT_ACTIVITY = 'tenis-em-dupla';
 const GOOGLE_KEY = 'AIzaSyCjqzmGElJkuDPEDVQQNqsOb-edZYauSto';
 
 export default function LocaisMeditacao() {
@@ -320,7 +288,7 @@ export default function LocaisMeditacao() {
               style={styles.card}
               onPress={() => {
                 router.push({
-                  pathname: '/pages/(logado)/categorias/ginastica/horarios',
+                  pathname: '/pages/(logado)/categorias/tenis/horarios',
                   params: {
                     localNome: place.name,
                     localEndereco: place.address,

@@ -37,16 +37,25 @@ export default function ModalidadesLutas() {
 
 
           <View style={styles.options}>
-            <TouchableOpacity style={styles.button1} activeOpacity={0.6} onPress={() => { router.replace('/pages/(logado)/categorias/volei/informacoesfv') }}>
-              <Text style={styles.buttonText}> Muay Thay</Text>
+            <TouchableOpacity style={styles.button1} activeOpacity={0.6} onPress={() => { router.replace({
+              pathname: '/pages/(logado)/categorias/lutas/escolhas',
+              params: { atividade: 'muay-thai' },
+            }) }}>
+              <Text style={styles.buttonText}> Muay Thai</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button2} activeOpacity={0.6} onPress={() => { }}>
+            <TouchableOpacity style={styles.button2} activeOpacity={0.6} onPress={() => { router.replace({
+              pathname: '/pages/(logado)/categorias/lutas/escolhas',
+              params: { atividade: 'karate' },
+            }) }}>
               
               <Text style={styles.buttonText}>Karatê </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button3} activeOpacity={0.6} onPress={() => { }}>
+            <TouchableOpacity style={styles.button3} activeOpacity={0.6} onPress={() => { router.replace({
+              pathname: '/pages/(logado)/categorias/lutas/escolhas',
+              params: { atividade: 'wrestling' },
+            }) }} >
               <Text style={styles.buttonText}> Wrestling</Text>
             </TouchableOpacity>
           </View>

@@ -37,11 +37,17 @@ export default function ModalidadesBasquete() {
 
 
           <View style={styles.options}>
-            <TouchableOpacity style={styles.button1} activeOpacity={0.6} onPress={() => { router }}>
+            <TouchableOpacity style={styles.button1} activeOpacity={0.6} onPress={() => { router.push({
+                  pathname: '/pages/(logado)/categorias/basquete/escolhas',
+                  params: { atividade: 'basquete-5x5' },
+                }) }}>
               <Text style={styles.buttonText}> Basquete 5x5 </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button2} activeOpacity={0.6} onPress={() => {router }}>
+            <TouchableOpacity style={styles.button2} activeOpacity={0.6} onPress={() => { router.push({
+                  pathname: '/pages/(logado)/categorias/basquete/escolhas',
+                  params: { atividade: 'basquete-3x3' },
+                }) }}>
               
               <Text style={styles.buttonText}>Basquete 3x3 </Text>
             </TouchableOpacity>

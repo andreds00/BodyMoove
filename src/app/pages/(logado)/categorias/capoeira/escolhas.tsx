@@ -47,97 +47,97 @@ type ActivityConfig = {
 };
 
 const ACTIVITIES: Record<string, ActivityConfig> = {
-  'ginastica-artistica': {
-    title: 'Ginástica Artística',
+  'capoeira-Angola': {
+    title: 'Capoeira Angola',
     description:
-      'Estúdios com aulas de ginástica artística para todas as idades e níveis.',
-    query: 'ginástica artística|centro ginastica|ginastica para crianças',
+      'A arte da Capoeira Angola, com ênfase na tradição e na musicalidade.',
+    query: 'capoeira angola|roda de capoeira|aula de capoeira angola',
     fallback: [
       {
-        id: 'studio-sunset',
-        name: 'Studio Sunset',
+        id: 'capoeira-center',
+        name: 'Capoeira Center',
         address: 'Rua das Palmeiras, 145 - Centro',
-        highlight: 'Aulas para crianças e adultos.',
+        highlight: 'Aulas para todas as idades e níveis.',
         extra: 'Abre às 07h',
         location: { lat: -23.5635, lng: -46.6549 },
       },
       {
-        id: 'espaco-artemis',
-        name: 'Espaço Artemis',
-        address: 'Av. das Nações, 300 - Bairro Novo',
-        highlight: 'Aulas para todas as idades e níveis.',
+        id: 'espaco-do-capoeira',
+        name: 'Espaço do Capoeira',
+        address: 'Av. Paulista, 2000 - Bela Vista',
+        highlight: 'Aulas com foco na tradição e musicalidade.',
         extra: 'Instrutores certificados',
         location: { lat: -23.5478, lng: -46.6363 },
       },
       {
-        id: 'experience-gyms',
-        name: 'Experience Gyms',
-        address: 'Rua do Comércio, 220 - Centro',
-        highlight: 'Aulas de ginástica artística e acrobacias.',
+        id: 'batuqueiro-zen',
+        name: 'Batuqueiro Zen',
+        address: ' Rua Augusta, 300 - Consolação',
+        highlight: 'Rodas ao ar livre no coração da cidade.',
         extra: 'Agenda flexível',
         location: { lat: -23.5672, lng: -46.6429 },
       },
     ],
   },
- 'ginastica-ritmica': {
-    title: 'Ginástica Rítmica',
+  'capoeira-regional': {
+    title: 'Capoeira Regional',
     description:
-      'Estúdios com aulas de ginástica rítmica para todas as idades e níveis.',
-    query: 'ginástica rítmica|estudio ginastica ritmica|aula de ginastica ritmica',
+      'A arte da Capoeira Regional, com ênfase na agilidade e na técnica.',
+    query: 'capoeira regional|roda de capoeira regional|aula de capoeira regional',
     fallback: [
       {
-        id: 'ginastica-ritmica-center',
-        name: 'Ginástica Rítmica Center',
-        address: 'Rua das Flores, 250 - Jardim das Acácias',
-        highlight: 'Aulas para iniciantes e avançados.',
+        id: 'afro-brasil',
+        name: 'Afro Brasil',
+        address: 'Rua Itaúna, 50 - Zona Sul',
+        highlight: 'cultura afro-brasileira e capoeira.',
         extra: 'Primeira aula experimental',
         location: { lat: -23.6001, lng: -46.6673 },
       },
       {
-        id: 'ritmica-fit',
-        name: 'Rítmica Fit Studio',
-        address: 'Av. Paulista, 1500 - Bela Vista',
-        highlight: 'Aulas para todas as idades.',
+        id: 'africa-gym',
+        name: 'Africa Gym',
+        address: 'Sao Paulo, Av. Liberdade, 456 - Centro',
+        highlight: 'Treinamento intensivo com foco em performance.',
         extra: 'Planos mensais',
         location: { lat: -23.5704, lng: -46.6582 },
       },
       {
-        id: 'studio-ritmica',
-        name: 'Studio Rítmica',
-        address: 'Rua do Sol, 75 - Centro',
-        highlight: 'Aulas de ginástica rítmica e dança.',
-        extra: 'Instrutores experientes',
+        id: 'cultura-viva',
+        name: 'Cultura Viva',
+        address: 'Av. Brasil, 755 - Bairro Viva',
+        highlight: 'Aulas para iniciantes às terças e quintas.',
+        extra: 'Estacionamento próprio',
         location: { lat: -23.5712, lng: -46.6789 },
       },
     ],
   },
-  hidroginástica: {
-    title: 'Hidroginástica',
+  'capoeira-contemporânea': {
+    title: 'Capoeira Contemporânea',
     description:
-      'Estúdios com aulas de hidroginástica para todas as idades e níveis.',
-    query: 'hidroginástica|aula de hidroginástica|ginastica na água',
+      'A arte da Capoeira Contemporânea, com ênfase na inovação e na expressão corporal.',
+    query: 'capoeira contemporânea|roda de capoeira contemporânea|aula de capoeira contemporânea',
     fallback: [
       {
-        id: 'aqua-fit',
-        name: 'Aqua Fit',
-        address: 'Rua das Acácias, 12 - Centro',
-        highlight: 'Aulas de hidroginástica para todas as idades.',
+        id: 'capoeira-lab',
+        name: 'Capoeira Lab',
+        address: 'Rua do Sol, 789 - Vila Nova',
+        highlight: 'Treinamento para todas as idades e níveis.',
         extra: 'Formato híbrido',
         location: { lat: -23.5558, lng: -46.6396 },
       },
       {
-        id: 'hydro-health',
-        name: 'Hydro Health',
-        address: 'Rua Horizonte, 410 - Zona Norte',
-        highlight: 'Sessões de hidroginástica e reabilitação.',
+        id: 'negra-arte',
+        name: 'Negra Arte',
+        address: 'Rua Augusta, 150 - Jardins',
+        highlight: 'Aulas inovadoras com foco na expressão corporal.',
         extra: 'Sábados de imersão',
         location: { lat: -23.5294, lng: -46.6499 },
       },
       {
-        id: 'splash-gym',
-        name: 'Splash Gym',
-        address: 'Av. Central, 1500 - Centro',
-        highlight: 'Aulas de hidroginástica para todos os níveis.',
+        id: 'preto-movimento',
+        name: 'Preto Movimento',
+        address: 'Av. São João, 300 - Centro',
+        highlight: 'Oficinas criativas e rodas de capoeira.',
         extra: 'Equipe multidisciplinar',
         location: { lat: -23.5505, lng: -46.6333 },
       },
@@ -145,7 +145,7 @@ const ACTIVITIES: Record<string, ActivityConfig> = {
   },
 };
 
-const DEFAULT_ACTIVITY = 'hidroginastica';
+const DEFAULT_ACTIVITY = 'capoeira-contemporânea';
 const GOOGLE_KEY = 'AIzaSyCjqzmGElJkuDPEDVQQNqsOb-edZYauSto';
 
 export default function LocaisMeditacao() {
@@ -320,7 +320,7 @@ export default function LocaisMeditacao() {
               style={styles.card}
               onPress={() => {
                 router.push({
-                  pathname: '/pages/(logado)/categorias/ginastica/horarios',
+                  pathname: '/pages/(logado)/categorias/capoeira/horarios',
                   params: {
                     localNome: place.name,
                     localEndereco: place.address,

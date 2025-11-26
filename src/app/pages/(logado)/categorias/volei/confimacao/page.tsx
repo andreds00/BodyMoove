@@ -1,25 +1,45 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import {useRouter} from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
+import colors from '@/constants/Colors';
 
 export default function ConfirmacaoFutevolei() {
-    const router = useRouter();
+  const router = useRouter();
+  const params = useLocalSearchParams<{
+    localNome?: string;
+    localEndereco?: string;
+    horario?: string;
+    nivel?: string;
+  }>();
+
+  const localNome = params.localNome || 'Arena não informada';
+  const localEndereco = params.localEndereco || '';
+  const horario = params.horario || 'Horário não informado';
+  const nivel = params.nivel || '';
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.background}>
         <View style={styles.content}>
           <Text style={styles.message}>
-            Parabéns por confirmar sua aula de{"\n"}
-            <Text style={styles.bold}>Futvôlei Intermediário</Text> no{" "}
-            <Text style={styles.bold}>Escopo Beach</Text>{" "}
-            às <Text style={styles.bold}>13h30!</Text>
+            Parabéns por agendar seu treino de{'\n'}
+            <Text style={styles.bold}>
+              Futevôlei {nivel ? `(${nivel})` : ''}
+            </Text>{' '}
+            na <Text style={styles.bold}>{localNome}</Text>
+            {localEndereco ? `\n${localEndereco}` : ''}
+            {'\n'}às <Text style={styles.bold}>{horario}</Text>!
           </Text>
 
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => router.back()}
-          >
+          <View style={styles.details}>
+            <Detail label="Arena" value={localNome} />
+            {localEndereco ? <Detail label="Endereço" value={localEndereco} /> : null}
+            <Detail label="Horário" value={horario} />
+            {nivel ? <Detail label="Nível" value={nivel} /> : null}
+          </View>
+
+          <TouchableOpacity style={styles.button} onPress={() => router.back()}>
             <Text style={styles.buttonText}>Fechar</Text>
           </TouchableOpacity>
         </View>
@@ -28,28 +48,56 @@ export default function ConfirmacaoFutevolei() {
   );
 }
 
+function Detail({ label, value }: { label: string; value: string }) {
+  return (
+    <View style={styles.detailRow}>
+      <Text style={styles.detailLabel}>{label}</Text>
+      <Text style={styles.detailValue}>{value}</Text>
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
+  container: { flex: 1 },
   background: {
     flex: 1,
-    backgroundColor: '#003973',
+    backgroundColor: colors.darkBlue,
     justifyContent: 'center',
+    paddingHorizontal: 30,
   },
   content: {
-    paddingHorizontal: 30,
     alignItems: 'center',
   },
   message: {
     color: '#fff',
     fontSize: 20,
     textAlign: 'center',
-    marginBottom: 40,
+    marginBottom: 24,
     lineHeight: 30,
   },
   bold: {
     fontWeight: 'bold',
+  },
+  details: {
+    width: '100%',
+    backgroundColor: 'rgba(255,255,255,0.12)',
+    borderRadius: 16,
+    padding: 18,
+    marginBottom: 28,
+  },
+  detailRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+  },
+  detailLabel: {
+    color: colors.lightBlue,
+    fontWeight: '600',
+  },
+  detailValue: {
+    color: '#fff',
+    flexShrink: 1,
+    textAlign: 'right',
   },
   button: {
     backgroundColor: '#fff',
@@ -58,8 +106,9 @@ const styles = StyleSheet.create({
     borderRadius: 25,
   },
   buttonText: {
-    color: '#003973',
+    color: colors.darkBlue,
     fontSize: 16,
     fontWeight: '600',
   },
 });
+

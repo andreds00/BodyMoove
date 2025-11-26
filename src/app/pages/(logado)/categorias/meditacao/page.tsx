@@ -37,16 +37,42 @@ export default function ModalidadesMeditacao() {
 
 
           <View style={styles.options}>
-            <TouchableOpacity style={styles.button1} activeOpacity={0.6} onPress={() => { router.push('/pages/(logado)/categorias/meditacao/escolhas') }}>
+            <TouchableOpacity
+              style={styles.button1}
+              activeOpacity={0.6}
+              onPress={() =>
+                router.push({
+                  pathname: '/pages/(logado)/categorias/meditacao/escolhas',
+                  params: { atividade: 'meditacao-guiada' },
+                })
+              }
+            >
               <Text style={styles.buttonText}> Meditação Guiada </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button2} activeOpacity={0.6} onPress={() => { }}>
-              
+            <TouchableOpacity
+              style={styles.button2}
+              activeOpacity={0.6}
+              onPress={() =>
+                router.push({
+                  pathname: '/pages/(logado)/categorias/meditacao/escolhas',
+                  params: { atividade: 'yoga' },
+                })
+              }
+            >
               <Text style={styles.buttonText}>Yoga </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button3} activeOpacity={0.6} onPress={() => { }}>
+            <TouchableOpacity
+              style={styles.button3}
+              activeOpacity={0.6}
+              onPress={() =>
+                router.push({
+                  pathname: '/pages/(logado)/categorias/meditacao/escolhas',
+                  params: { atividade: 'mindfulness' },
+                })
+              }
+            >
               <Text style={styles.buttonText}> Mindfullness </Text>
             </TouchableOpacity>
 

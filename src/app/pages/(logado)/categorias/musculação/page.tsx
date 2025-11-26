@@ -37,11 +37,17 @@ export default function ModalidadesMusculação() {
 
 
           <View style={styles.options}>
-            <TouchableOpacity style={styles.button1} activeOpacity={0.6} onPress={() => {router}}>
+            <TouchableOpacity style={styles.button1} activeOpacity={0.6} onPress={() => {router.push({
+              pathname: '/pages/(logado)/categorias/musculação/escolhas',
+              params: { atividade: 'crossfit' },
+            }) }}>
               <Text style={styles.buttonText}> Crossfit </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button2} activeOpacity={0.6} onPress={() => { }}>
+            <TouchableOpacity style={styles.button2} activeOpacity={0.6} onPress={() => {router.push({
+              pathname: '/pages/(logado)/categorias/musculação/escolhas',
+              params: { atividade: 'musculacao' },
+            }) }}>
               
               <Text style={styles.buttonText}> Musculação </Text>
             </TouchableOpacity>

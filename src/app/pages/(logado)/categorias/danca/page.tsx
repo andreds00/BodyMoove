@@ -5,14 +5,12 @@ import colors from '@/constants/Colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
-import { ScrollView } from 'react-native-gesture-handler';
 
 export default function ModalidadesDanca() {
 
 
   return (
     <SafeAreaView style={styles.container}>
-
       <View style={styles.container}>
 
         <LinearGradient
@@ -28,42 +26,48 @@ export default function ModalidadesDanca() {
           <Text style={styles.title}>Danças</Text>
 
         </LinearGradient>
-        <ScrollView
-          contentContainerStyle={{ flexGrow: 1, backgroundColor: colors.white }}
-          showsVerticalScrollIndicator={false}
-        >
 
-          <View style={styles.main}>
+        <View style={styles.main}>
 
-            <View style={{ width: "100%", justifyContent: 'center', marginTop: 20 }}>
-              <Text style={styles.subtitle}>
-                Selecione a categoria de dança que deseja praticar:
-              </Text>
-            </View>
-
-
-            <View style={styles.options}>
-              <TouchableOpacity style={styles.button1} activeOpacity={0.6} onPress={() => { router }}>
-                <Text style={styles.buttonText}> Zumba </Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity style={styles.button2} activeOpacity={0.6} onPress={() => { router.replace('/pages/(logado)/categorias/danca/confimacao/page') }}>
-
-                <Text style={styles.buttonText}> Jazz </Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity style={styles.button3} activeOpacity={0.6} onPress={() => { }}>
-                <Text style={styles.buttonText}> Barre Fit </Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity style={styles.button3} activeOpacity={0.6} onPress={() => { }}>
-                <Text style={styles.buttonText}>Fit Dance</Text>
-              </TouchableOpacity>
-            </View>
+          <View style={{ width: "100%", justifyContent: 'center', marginTop: 20 }}>
+            <Text style={styles.subtitle}>
+              Selecione a categoria de dança que deseja praticar:
+            </Text>
           </View>
-        </ScrollView>
-      </View>
 
+
+          <View style={styles.options}>
+            <TouchableOpacity style={styles.button1} activeOpacity={0.6} onPress={() => { router.replace({
+              pathname: '/pages/(logado)/categorias/danca/escolhas',
+              params: { atividade: 'zumba' },
+            }) }}>
+              <Text style={styles.buttonText}> Zumba </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.button2} activeOpacity={0.6} onPress={() => { router.replace({
+              pathname: '/pages/(logado)/categorias/danca/escolhas',
+              params: { atividade: 'jazz' },
+            }) }}>
+              
+              <Text style={styles.buttonText}> Jazz </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.button3} activeOpacity={0.6} onPress={() => { router.replace({
+              pathname: '/pages/(logado)/categorias/danca/escolhas',
+              params: { atividade: 'barre-fit' },
+            }) }}>
+              <Text style={styles.buttonText}> Barre Fit </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.button3} activeOpacity={0.6} onPress={() => { router.replace({
+              pathname: '/pages/(logado)/categorias/danca/escolhas',
+              params: { atividade: 'fit-dance' },
+            }) }}>
+              <Text style={styles.buttonText}>Fit Dance</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
 
     </SafeAreaView >
   );
@@ -74,10 +78,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.white,
-    
   },
   header: {
-    position: 'sticky',
     width: '100%',
     flexDirection: "row",
     alignContent: "center",
@@ -115,7 +117,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     alignItems: 'center',
   },
-  button2: {
+  button2: { 
     width: '100%',
     backgroundColor: colors.blue,
     paddingVertical: 65,
@@ -140,7 +142,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 20,
     paddingHorizontal: 15,
-    marginBottom: 100,
 
   },
   buttonText: {

@@ -1,18 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useMemo } from 'react';
 import {
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
   ScrollView,
-  ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import MapView, { Marker, Region } from 'react-native-maps';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialIcons } from '@expo/vector-icons';
 import colors from '@/constants/Colors';
 import { router } from 'expo-router';
+import { WebView } from 'react-native-webview';
 
 type HandebolPlace = {
   nome: string;
@@ -50,51 +49,67 @@ const locais: HandebolPlace[] = [
   },
 ];
 
+// centro padrão São Paulo
+const SAO_PAULO_CENTER = {
+  lat: -23.5505,
+  lng: -46.6333,
+};
+
 export default function LocaisHandebol() {
-  const [region, setRegion] = useState<Region | null>(null);
-  const [loadingLocation, setLoadingLocation] = useState(true);
-  const [locationError, setLocationError] = useState<string | null>(null);
+  // monta o HTML do mapa com Leaflet + OSM e os marcadores de `locais`
+  const mapHtml = useMemo(() => {
+    const markersJson = JSON.stringify(
+      locais.map((l) => ({
+        nome: l.nome,
+        endereco: l.endereco,
+        lat: l.latitude,
+        lng: l.longitude,
+      }))
+    );
 
-  useEffect(() => {
-    let mounted = true;
-    (async () => {
-      try {
-        const locationModule = await import('expo-location');
-        const requestPermission = locationModule?.requestForegroundPermissionsAsync;
-        const getCurrentPosition = locationModule?.getCurrentPositionAsync;
-        const accuracy = locationModule?.Accuracy?.Balanced;
+    return `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+          <link
+            rel="stylesheet"
+            href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          />
+          <style>
+            html, body, #map {
+              margin: 0;
+              padding: 0;
+              width: 100%;
+              height: 100%;
+            }
+          </style>
+        </head>
+        <body>
+          <div id="map"></div>
 
-        if (!requestPermission || !getCurrentPosition || !accuracy) {
-          throw new Error('expo-location não está disponível neste build.');
-        }
+          <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+          <script>
+            var center = [${SAO_PAULO_CENTER.lat}, ${SAO_PAULO_CENTER.lng}];
+            var map = L.map('map').setView(center, 12);
 
-        const { status } = await requestPermission();
-        if (status !== 'granted') {
-          if (mounted) {
-            setLocationError('Ative a localização para ver quadras próximas.');
-            setLoadingLocation(false);
-          }
-          return;
-        }
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+              maxZoom: 19,
+              attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
 
-        const position = await getCurrentPosition({ accuracy });
-        if (mounted) {
-          setRegion({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-            latitudeDelta: 0.04,
-            longitudeDelta: 0.04,
-          });
-        }
-      } catch (_) {
-        if (mounted) setLocationError('Não foi possível obter sua localização.');
-      } finally {
-        if (mounted) setLoadingLocation(false);
-      }
-    })();
-    return () => {
-      mounted = false;
-    };
+            var markers = ${markersJson};
+
+            markers.forEach(function(m) {
+              L.marker([m.lat, m.lng])
+                .addTo(map)
+                .bindPopup('<b>' + m.nome + '</b><br/>' + m.endereco);
+            });
+          </script>
+        </body>
+      </html>
+    `;
   }, []);
 
   return (
@@ -112,26 +127,18 @@ export default function LocaisHandebol() {
       </LinearGradient>
 
       <View style={styles.main}>
-        <Text style={styles.subtitle}>Selecione um local para reservar seu horário</Text>
+        <Text style={styles.subtitle}>
+          Selecione um local para reservar seu horário
+        </Text>
 
-        {loadingLocation ? (
-          <ActivityIndicator size="large" color={colors.blue} style={{ marginVertical: 20 }} />
-        ) : region ? (
-          <MapView style={styles.map} region={region} showsUserLocation>
-            {locais.map((local) => (
-              <Marker
-                key={local.nome}
-                coordinate={{ latitude: local.latitude, longitude: local.longitude }}
-                title={local.nome}
-                description={local.endereco}
-              />
-            ))}
-          </MapView>
-        ) : (
-          <Text style={styles.errorText}>
-            {locationError || 'Ative a localização para visualizar o mapa.'}
-          </Text>
-        )}
+        {/* Mapa com OpenStreetMap (sem API do Google, sem localização) */}
+        <View style={styles.mapWrapper}>
+          <WebView
+            originWhitelist={['*']}
+            source={{ html: mapHtml }}
+            style={styles.map}
+          />
+        </View>
 
         <ScrollView contentContainerStyle={styles.list}>
           {locais.map((local, index) => (
@@ -190,15 +197,16 @@ const styles = StyleSheet.create({
     color: colors.darkGray,
     marginBottom: 12,
   },
-  map: {
+  mapWrapper: {
     width: '100%',
     height: 220,
     borderRadius: 16,
+    overflow: 'hidden',
+    backgroundColor: '#eee',
+    marginBottom: 16,
   },
-  errorText: {
-    textAlign: 'center',
-    color: colors.darkGray,
-    marginBottom: 12,
+  map: {
+    flex: 1,
   },
   list: {
     paddingVertical: 18,
@@ -232,4 +240,3 @@ const styles = StyleSheet.create({
     marginTop: 6,
   },
 });
-

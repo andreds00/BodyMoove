@@ -75,7 +75,7 @@ export default function Perfil() {
                         <MaterialIcons name="keyboard-arrow-right" size={24} color="#9097B2" />
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.menuItem}>
+                    <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/pages/(logado)/configuracao/page')}>
                         <Ionicons name="settings-outline" size={24} color="#9097B2" />
                         <Text style={styles.menuText}>Configurações</Text>
                         <MaterialIcons name="keyboard-arrow-right" size={24} color="#9097B2" />

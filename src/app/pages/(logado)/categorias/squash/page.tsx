@@ -37,11 +37,17 @@ export default function ModalidadesSquash() {
 
 
           <View style={styles.options}>
-            <TouchableOpacity style={styles.button1} activeOpacity={0.6} onPress={() => {router}}>
+            <TouchableOpacity style={styles.button1} activeOpacity={0.6} onPress={() => {router.push({
+              pathname: '/pages/(logado)/categorias/squash/escolhas',
+              params: {activity: 'squash-individual'},
+            }) }}>
               <Text style={styles.buttonText}> Individual </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button2} activeOpacity={0.6} onPress={() => { }}>
+            <TouchableOpacity style={styles.button2} activeOpacity={0.6} onPress={() => { router.push({
+              pathname: '/pages/(logado)/categorias/squash/escolhas',
+              params: {activity: 'squash-em-dupla'},
+            }) }}>
               
               <Text style={styles.buttonText}> Duplas </Text>
             </TouchableOpacity>

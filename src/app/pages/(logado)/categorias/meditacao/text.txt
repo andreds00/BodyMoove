@@ -1,0 +1,21 @@
+<View style={styles.content}>
+          <Text style={styles.message}>
+            Parabéns por confirmar sua aula de{"\n"}
+            <Text style={styles.bold}>Hot Yoga Iniciante</Text> no{" "}
+            <Text style={styles.bold}>Studio Sunset</Text>{" "}
+            às <Text style={styles.bold}>10h00!</Text>
+          </Text>
+
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              if (router.canGoBack()) {
+                router.back();
+              } else {
+                router.replace('/pages/(logado)/home/page'); // rota padrão
+              }
+            }}
+          >
+            <Text style={styles.buttonText}>Fechar</Text>
+          </TouchableOpacity>
+        </View>

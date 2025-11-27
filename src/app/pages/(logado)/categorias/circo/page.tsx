@@ -37,11 +37,17 @@ export default function ModalidadesCirco() {
 
 
           <View style={styles.options}>
-            <TouchableOpacity style={styles.button1} activeOpacity={0.6} onPress={() => {}}>
+            <TouchableOpacity style={styles.button1} activeOpacity={0.6} onPress={() => { router.push({
+              pathname: '/pages/(logado)/categorias/circo/escolhas',
+              params: {activity: 'acrobatismo'},
+            }) }}>
               <Text style={styles.buttonText}> Acrobatismo </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button2} activeOpacity={0.6} onPress={() => {router}}>
+            <TouchableOpacity style={styles.button2} activeOpacity={0.6} onPress={() => {router.push({
+              pathname: '/pages/(logado)/categorias/circo/escolhas',
+              params: {activity: 'malabarismo'},
+            })}}>
               
               <Text style={styles.buttonText}>Malabarismo </Text>
             </TouchableOpacity>

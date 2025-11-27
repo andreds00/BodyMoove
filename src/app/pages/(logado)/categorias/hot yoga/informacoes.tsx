@@ -1,42 +1,79 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons'; 
-import {useRouter} from 'expo-router';
+import { useRouter, useLocalSearchParams, router } from 'expo-router';
+import { LinearGradient } from 'expo-linear-gradient';
+import colors from '@/constants/Colors';
 
-export default function InformacoesHotYoga() {
-    const router = useRouter();
+export default function ConfirmacaoHotYoga() {
+
+
   return (
     <SafeAreaView style={styles.container}>
-    
-      <Text style={styles.logo}>Body Moove</Text>
 
-   
-      <View style={styles.banner}>
-        <Text style={styles.bannerText}> Hot Yoga Iniciante - 10h00</Text>
-      </View>
+      <LinearGradient
+        style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+        colors={[colors.darkBlue, colors.blue, colors.lightBlue]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 0 }}
+      >
+        <View style={styles.background}>
+          <View style={styles.content}>
+            <Text style={styles.message}>
+              Parabéns por confirmar sua aula de{" "}
+              <Text style={styles.bold}>Hot Yoga Iniciante</Text> no{" "}
+              <Text style={styles.bold}>Studio Sunset</Text>{" "}
+              às <Text style={styles.bold}>10h00!</Text>
+            </Text>
 
-     
-      <TouchableOpacity style={styles.button}>
-        <Ionicons name="location-outline" size={20} color="#333" />
-        <Text style={styles.buttonText}>Studio Sunset</Text>
-      </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => {
+                Alert.alert('Parabéns', 'Sua presença foi confirmada com sucesso.');
 
-      <TouchableOpacity style={styles.button}>
-        <Ionicons name="person-outline" size={20} color="#333" />
-        <Text style={styles.buttonText}>Instrutora Anna Mello</Text>
-      </TouchableOpacity>
+                setTimeout(() => {
+                  if (router.canGoBack()) {
+                    router.back();
+                  } else {
+                    router.replace('/pages/(logado)/home/page');
+                  }
+                }, 100);
+              }}
+            >
+              <Text style={styles.buttonText}>Confirmar Presença</Text>
+            </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button}>
-        <Ionicons name="alert-circle-outline" size={20} color="#333" />
-        <Text style={styles.buttonText}>Instruções Pré-aula</Text>
-      </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => {
+                Alert.alert('Confirmação', 'Sua presença foi desmarcada com sucesso.');
 
-      <TouchableOpacity style={styles.confirmButton}>
-        <Ionicons name="checkmark-circle-outline" size={20} color="#fff" />
-        <Text style={styles.confirmText}>Confirmar presença</Text>
-        //rota de volta
-      </TouchableOpacity>
+                setTimeout(() => {
+                  if (router.canGoBack()) {
+                    router.back();
+                  } else {
+                    router.replace('/pages/(logado)/home/page');
+                  }
+                }, 100);
+              }}
+            >
+              <Text style={styles.buttonText}>Desmarcar presença</Text>
+            </TouchableOpacity>
+
+
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => {
+               
+                  router.replace('/pages/(logado)/home/page');}}
+               
+            >
+              <Text style={styles.buttonText}>Fechar</Text>
+            </TouchableOpacity>
+
+          </View>
+        </View>
+      </LinearGradient>
     </SafeAreaView>
   );
 }
@@ -44,55 +81,68 @@ export default function InformacoesHotYoga() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    padding: 20,
+    backgroundColor: colors.darkBlue
   },
-  logo: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-  banner: {
-    backgroundColor: '#007BFF',
-    padding: 15,
-    borderRadius: 8,
-    marginBottom: 20,
-  },
-  bannerText: {
-    color: '#fff',
-    fontSize: 18,
-    textAlign: 'center',
-    fontWeight: '600',
-  },
-  button: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 12,
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
-    marginBottom: 12,
-  },
-  buttonText: {
-    marginLeft: 10,
-    fontSize: 16,
-    color: '#333',
-  },
-  confirmButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#28A745',
-    padding: 14,
-    borderRadius: 8,
-    marginTop: 20,
+  background: {
     justifyContent: 'center',
   },
-  confirmText: {
-    marginLeft: 10,
-    fontSize: 16,
+  content: {
+    paddingHorizontal: 30,
+    alignItems: 'center',
+  },
+  message: {
     color: '#fff',
+    fontSize: 23,
+    textAlign: 'center',
+    marginBottom: 30,
+    lineHeight: 30,
+  },
+  bold: {
+    fontWeight: 'bold',
+  },
+  detailsContainer: {
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    padding: 20,
+    borderRadius: 12,
+    marginBottom: 30,
+    width: '100%',
+  },
+  detailRow: {
+    flexDirection: 'row',
+    marginBottom: 12,
+    alignItems: 'flex-start',
+  },
+  detailLabel: {
+    color: '#fff',
+    fontSize: 16,
     fontWeight: '600',
+    width: 100,
+  },
+  detailValue: {
+    color: '#fff',
+    fontSize: 16,
+    flex: 1,
+  },
+  button: {
+    marginTop: 20,
+    backgroundColor: '#fff',
+    paddingVertical: 12,
+    paddingHorizontal: 40,
+    borderRadius: 25,
+    width: '100%'
+  },
+  buttonText: {
+    textAlign: 'center',
+    color: '#003973',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  confiraEmail: {
+    marginTop: 10,
+    textAlign: 'center',
+    color: colors.white,
+    fontSize: 16,
+    fontWeight: '600',
+
   },
 });

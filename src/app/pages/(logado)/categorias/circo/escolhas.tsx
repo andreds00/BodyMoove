@@ -1,30 +1,17 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  ActivityIndicator,
-  Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import MapView, { Marker, Region } from 'react-native-maps';
 import colors from '@/constants/Colors';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
-
-type GooglePlace = {
-  place_id: string;
-  name: string;
-  vicinity?: string;
-  rating?: number;
-  user_ratings_total?: number;
-  geometry: {
-    location: { lat: number; lng: number };
-  };
-};
+import { WebView } from 'react-native-webview';
 
 type DisplayPlace = {
   id: string;
@@ -47,176 +34,154 @@ type ActivityConfig = {
 };
 
 const ACTIVITIES: Record<string, ActivityConfig> = {
-  'tenis-em-dupla': {
-    title: 'Tenis em Dupla',
+  acrobatismo: {
+    title: 'Acrobatismo',
     description:
-      'Locais com quadras de tênis para jogos em dupla, com instrutores disponíveis.',
-    query: 'quadras de tênis|tênis em dupla|instrutores de tênis',
+      'Locais com instrutores e espaços para prática de acrobacias e ginástica.',
+    query: 'acrobacias|ginástica|instrutores de acrobacias',
     fallback: [
       {
-        id: 'quadra-top-spin',
-        name: 'Quadra Top Spin',
-        address: 'Rua das Palmeiras, 123 - Centro',
-        highlight: 'Aulas para todos os níveis.',
-        extra: 'Abre às 10h',
+        id: 'acrofit-studio',
+        name: 'Acrofit Studio',
+        address: 'Rua das Flores, 123 - Centro',
+        highlight: 'Instrutores experientes em acrobacias aéreas.',
+        extra: 'Aulas para todas as idades',
         location: { lat: -23.5635, lng: -46.6549 },
       },
       {
-        id: 'raquetes-e-cia',
-        name: 'Raquetes & Cia',
-        address: 'Av. dos Esportes, 456 - Jardim das Flores',
-        highlight: 'Instrutores certificados para jogos em dupla.',
+        id: 'gymnastica-max',
+        name: 'Ginástica Max',
+        address: 'Av. Paulista, 1000 - Bela Vista',
+        highlight: 'Espaço amplo com equipamentos modernos.',
         extra: 'Planos mensais',
         location: { lat: -23.5478, lng: -46.6363 },
       },
       {
-        id: 'bolas-e-aces',
-        name: 'Bolas & Aces',
-        address: 'Rua do Progresso, 200 - Zona Leste',
-        highlight: 'Quadras modernas com iluminação noturna.',
+        id: 'circo-acrobatico',
+        name: 'Circo Acrobático',
+        address: 'Rua do Circo, 75 - Liberdade',
+        highlight: 'Aulas de acrobacias em grupo e individuais.',
         extra: 'Agenda flexível',
         location: { lat: -23.5672, lng: -46.6429 },
       },
     ],
   },
-  individual: {
-    title: 'Tenis Individual',
+  malabarismo: {
+    title: 'Malabarismo',
     description:
-      'Locais com quadras de tênis para jogos individuais, com instrutores disponíveis.',
-    query: 'quadras de tênis|tênis individual|instrutores de tênis',
+      'Locais com espaços e instrutores para prática de malabarismo e habilidades circenses.',
+    query: 'malabarismo|habilidades circenses|instrutores de malabarismo',
     fallback: [
       {
-        id: 'solo-spin',
-        name: 'Solo Spin',
-        address: 'Rua Itaúna, 50 - Zona Sul',
-        highlight: 'Aulas individuais personalizadas.',
+        id: 'circo-habilidades',
+        name: 'Circo & Habilidades',
+        address: 'Av. das Artes, 200 - Jardim América',
+        highlight: 'Instrutores especializados em malabarismo.',
         extra: 'Primeira aula experimental',
         location: { lat: -23.6001, lng: -46.6673 },
       },
       {
-        id: 'tacos-e-aces',
-        name: 'Tacos & Aces',
-        address: 'Rua Orquídeas, 301 - Alto da Colina',
-        highlight: 'Instrutores especializados em jogos individuais.',
-        extra: 'Planos mensais',
+        id: 'palhacos-e-arte',
+        name: 'Palhaços & Arte',
+        address: 'Rua Alegre, 88 - Moema',
+        highlight:
+          'Espaço dedicado ao ensino de malabarismo para todas as idades.',
+        extra: 'Aulas em grupo e individuais',
         location: { lat: -23.5704, lng: -46.6582 },
       },
       {
-        id: 'power-tennis',
-        name: 'Power Tennis',
-        address: 'Av. Brasil, 450 - Centro',
-        highlight: 'Instrutores especializados em jogos individuais.',
+        id: 'arte-do-malabarismo',
+        name: 'Arte do Malabarismo',
+        address: 'Praça Central, 45 - Pinheiros',
+        highlight: 'Aulas práticas com foco em técnicas variadas.',
         extra: 'Estacionamento próprio',
         location: { lat: -23.5712, lng: -46.6789 },
       },
     ],
-  }
+  },
 };
 
-const DEFAULT_ACTIVITY = 'tenis-em-dupla';
-const GOOGLE_KEY = 'AIzaSyCjqzmGElJkuDPEDVQQNqsOb-edZYauSto';
+const DEFAULT_ACTIVITY = 'malabarismo';
 
-export default function LocaisMeditacao() {
+// centro padrão em São Paulo (para o mapa)
+const SAO_PAULO_CENTER = {
+  lat: -23.5505,
+  lng: -46.6333,
+};
+
+export default function LocaisCirco() {
   const params = useLocalSearchParams<{ atividade?: string }>();
   const activityKey =
     typeof params.atividade === 'string' ? params.atividade : DEFAULT_ACTIVITY;
   const activity = ACTIVITIES[activityKey] ?? ACTIVITIES[DEFAULT_ACTIVITY];
 
-  const [region, setRegion] = useState<Region | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [locationError, setLocationError] = useState<string | null>(null);
-  const [places, setPlaces] = useState<GooglePlace[]>([]);
-
-  useEffect(() => {
-    let isMounted = true;
-
-    (async () => {
-      try {
-        const locationModule = await import('expo-location');
-        const requestPermission = locationModule?.requestForegroundPermissionsAsync;
-        const getCurrentPosition = locationModule?.getCurrentPositionAsync;
-        const accuracy = locationModule?.Accuracy?.Highest;
-
-        if (!requestPermission || !getCurrentPosition || !accuracy) {
-          throw new Error('expo-location não está disponível neste build.');
-        }
-
-        const { status } = await requestPermission();
-        if (status !== 'granted') {
-          Alert.alert(
-            'Permissão necessária',
-            'Ative sua localização para sugerir locais próximos.'
-          );
-          if (isMounted) {
-            setLocationError('Localização desativada.');
-            setLoading(false);
-          }
-          return;
-        }
-
-        const location = await getCurrentPosition({ accuracy });
-        const { latitude, longitude } = location.coords;
-
-        if (isMounted) {
-          setRegion({
-            latitude,
-            longitude,
-            latitudeDelta: 0.02,
-            longitudeDelta: 0.02,
-          });
-        }
-
-        const query = encodeURIComponent(activity.query);
-        const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=4000&keyword=${query}&key=${GOOGLE_KEY}`;
-        const response = await fetch(url);
-        const data = await response.json();
-
-        if (isMounted && Array.isArray(data.results)) {
-          setPlaces(data.results.slice(0, 8));
-        }
-      } catch (err) {
-        console.warn(err);
-        if (isMounted) {
-          setLocationError(
-            err instanceof Error
-              ? err.message
-              : 'Não foi possível obter sua localização.'
-          );
-        }
-      } finally {
-        if (isMounted) {
-          setLoading(false);
-        }
-      }
-    })();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [activity.query]);
-
-  const displayPlaces: DisplayPlace[] = useMemo(() => {
-    if (places.length === 0) {
-      return activity.fallback;
-    }
-
-    return places.map((place) => ({
-      id: place.place_id,
-      name: place.name,
-      address: place.vicinity ?? 'Endereço não informado',
-      highlight: place.user_ratings_total
-        ? `${place.user_ratings_total} avaliações`
-        : undefined,
-      rating: place.rating,
-      extra: 'Sugerido pelo Google Maps',
-      location: {
-        lat: place.geometry.location.lat,
-        lng: place.geometry.location.lng,
-      },
-    }));
-  }, [places, activity.fallback]);
+  const displayPlaces: DisplayPlace[] = useMemo(
+    () => activity.fallback,
+    [activity.fallback],
+  );
 
   const markers = displayPlaces.filter((p) => p.location);
+
+  // HTML do mapa (Leaflet + OpenStreetMap) com os marcadores vindo do JS
+  const mapHtml = useMemo(() => {
+    const markersJson = JSON.stringify(
+      markers.map((m) => ({
+        id: m.id,
+        name: m.name,
+        address: m.address,
+        lat: m.location!.lat,
+        lng: m.location!.lng,
+      })),
+    );
+
+    return `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8" />
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, maximum-scale=1"
+          />
+          <link
+            rel="stylesheet"
+            href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          />
+          <style>
+            html, body, #map {
+              margin: 0;
+              padding: 0;
+              width: 100%;
+              height: 100%;
+            }
+          </style>
+        </head>
+        <body>
+          <div id="map"></div>
+
+          <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+          <script>
+            var center = [${SAO_PAULO_CENTER.lat}, ${SAO_PAULO_CENTER.lng}];
+            var map = L.map('map').setView(center, 12);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+              maxZoom: 19,
+              attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+
+            var markers = ${markersJson};
+
+            markers.forEach(function(m) {
+              if (!m.lat || !m.lng) return;
+              L.marker([m.lat, m.lng])
+                .addTo(map)
+                .bindPopup('<b>' + m.name + '</b><br/>' + m.address);
+            });
+          </script>
+        </body>
+      </html>
+    `;
+  }, [markers]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -239,42 +204,18 @@ export default function LocaisMeditacao() {
       <View style={styles.main}>
         <Text style={styles.subtitle}>{activity.description}</Text>
 
-        {loading ? (
-          <ActivityIndicator
-            size="large"
-            color={colors.blue}
-            style={{ marginTop: 20 }}
-          />
-        ) : region ? (
-          <MapView
+        {/* Mapa via WebView + Leaflet + OpenStreetMap */}
+        <View style={styles.mapWrapper}>
+          <WebView
+            originWhitelist={['*']}
+            source={{ html: mapHtml }}
             style={styles.map}
-            region={region}
-            showsUserLocation
-            loadingEnabled
-          >
-            {markers.map((place) => (
-              <Marker
-                key={place.id}
-                coordinate={{
-                  latitude: place.location!.lat,
-                  longitude: place.location!.lng,
-                }}
-                title={place.name}
-                description={place.address}
-              />
-            ))}
-          </MapView>
-        ) : (
-          <Text style={styles.errorText}>
-            {locationError ?? 'Não foi possível obter sua localização.'}
-          </Text>
-        )}
+          />
+        </View>
 
         <View style={styles.listHeader}>
           <Text style={styles.listTitle}>Locais recomendados</Text>
-          {places.length === 0 && (
-            <Text style={styles.listSubtitle}>Mostrando sugestões fixas</Text>
-          )}
+          <Text style={styles.listSubtitle}>Mostrando sugestões fixas</Text>
         </View>
 
         <ScrollView
@@ -288,7 +229,7 @@ export default function LocaisMeditacao() {
               style={styles.card}
               onPress={() => {
                 router.push({
-                  pathname: '/pages/(logado)/categorias/tenis/horarios',
+                  pathname: '/pages/(logado)/categorias/circo/horarios',
                   params: {
                     localNome: place.name,
                     localEndereco: place.address,
@@ -305,7 +246,9 @@ export default function LocaisMeditacao() {
                       size={14}
                       color="#FFB703"
                     />
-                    <Text style={styles.ratingText}>{place.rating.toFixed(1)}</Text>
+                    <Text style={styles.ratingText}>
+                      {place.rating.toFixed(1)}
+                    </Text>
                   </View>
                 )}
               </View>
@@ -347,15 +290,15 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 20,
   },
-  map: {
+  mapWrapper: {
     width: '100%',
     height: 260,
     borderRadius: 16,
+    overflow: 'hidden',
+    backgroundColor: '#eee',
   },
-  errorText: {
-    textAlign: 'center',
-    color: colors.darkGray,
-    marginBottom: 16,
+  map: {
+    flex: 1,
   },
   listHeader: {
     marginTop: 24,

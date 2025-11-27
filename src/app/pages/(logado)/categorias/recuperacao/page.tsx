@@ -37,16 +37,25 @@ export default function ModalidadesRecuperacao() {
 
 
           <View style={styles.options}>
-            <TouchableOpacity style={styles.button1} activeOpacity={0.6} onPress={() => {router}}>
+            <TouchableOpacity style={styles.button1} activeOpacity={0.6} onPress={() => {router.push({
+              pathname: '/pages/(logado)/categorias/recuperacao/escolhas',
+              params: {activity: 'crioterapia'},
+            }) }}>
               <Text style={styles.buttonText}> Crioterapia </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button2} activeOpacity={0.6} onPress={() => { }}>
+            <TouchableOpacity style={styles.button2} activeOpacity={0.6} onPress={() => {router.push({
+              pathname: '/pages/(logado)/categorias/recuperacao/escolhas',
+              params: {activity: 'massagem'},
+            }) }}>
               
               <Text style={styles.buttonText}> Massagem </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button3} activeOpacity={0.6} onPress={() => { }}>
+            <TouchableOpacity style={styles.button3} activeOpacity={0.6} onPress={() => {router.push({
+              pathname: '/pages/(logado)/categorias/recuperacao/escolhas',
+              params: {activity: 'liberacao'},
+            }) }}>
               <Text style={styles.buttonText}> Liberação </Text>
             </TouchableOpacity>
           </View>

@@ -37,16 +37,25 @@ export default function ModalidadesSpinning() {
 
 
           <View style={styles.options}>
-            <TouchableOpacity style={styles.button1} activeOpacity={0.6} onPress={() => {}}>
+            <TouchableOpacity style={styles.button1} activeOpacity={0.6} onPress={() => { router.push({
+              pathname: '/pages/(logado)/categorias/patinacao/escolhas',
+              params: {activity: 'patinacao-treino-de-intensidade'},
+            }) }}>
               <Text style={styles.buttonText}> Treino de Intensidade </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button2} activeOpacity={0.6} onPress={() => { router}}>
+            <TouchableOpacity style={styles.button2} activeOpacity={0.6} onPress={() => { router.push({
+              pathname: '/pages/(logado)/categorias/patinacao/escolhas',
+              params: {activity: 'patinacao-treino-de-hiit'},
+            }) }}>
               
               <Text style={styles.buttonText}> Treino de HIIT </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button3} activeOpacity={0.6} onPress={() => { }}>
+            <TouchableOpacity style={styles.button3} activeOpacity={0.6} onPress={() => { router.push({
+              pathname: '/pages/(logado)/categorias/patinacao/escolhas',
+              params: {activity: 'patinacao-treino-de-velocidade'},
+            }) }}>
               <Text style={styles.buttonText}> Treino de Velocidade </Text>
             </TouchableOpacity>
           </View>

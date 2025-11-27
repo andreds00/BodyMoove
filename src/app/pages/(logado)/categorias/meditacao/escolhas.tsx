@@ -1,30 +1,17 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  ActivityIndicator,
-  Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import MapView, { Marker, Region } from 'react-native-maps';
 import colors from '@/constants/Colors';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
-
-type GooglePlace = {
-  place_id: string;
-  name: string;
-  vicinity?: string;
-  rating?: number;
-  user_ratings_total?: number;
-  geometry: {
-    location: { lat: number; lng: number };
-  };
-};
+import { WebView } from 'react-native-webview';
 
 type DisplayPlace = {
   id: string;
@@ -42,7 +29,7 @@ type DisplayPlace = {
 type ActivityConfig = {
   title: string;
   description: string;
-  query: string;
+  query?: string;
   fallback: DisplayPlace[];
 };
 
@@ -146,124 +133,61 @@ const ACTIVITIES: Record<string, ActivityConfig> = {
 };
 
 const DEFAULT_ACTIVITY = 'meditacao-guiada';
-const GOOGLE_KEY = 'AIzaSyCjqzmGElJkuDPEDVQQNqsOb-edZYauSto';
+
+// Centro padrão
+const CENTER = { lat: -23.5505, lng: -46.6333 };
 
 export default function LocaisMeditacao() {
   const params = useLocalSearchParams<{ atividade?: string }>();
   const activityKey =
     typeof params.atividade === 'string' ? params.atividade : DEFAULT_ACTIVITY;
+
   const activity = ACTIVITIES[activityKey] ?? ACTIVITIES[DEFAULT_ACTIVITY];
+  const markers = activity.fallback.filter((p) => p.location);
 
-  const [region, setRegion] = useState<Region | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [locationError, setLocationError] = useState<string | null>(null);
-  const [places, setPlaces] = useState<GooglePlace[]>([]);
+  const mapHtml = useMemo(() => {
+    const markersJson = JSON.stringify(markers);
 
-  useEffect(() => {
-    let isMounted = true;
+    return `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+        <style>
+          html, body, #map { margin:0; padding:0; height:100%; width:100%;}
+        </style>
+      </head>
+      <body>
+        <div id="map"></div>
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+        <script>
+          var map = L.map('map').setView([${CENTER.lat}, ${CENTER.lng}], 12);
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+          }).addTo(map);
 
-    (async () => {
-      try {
-        const locationModule = await import('expo-location');
-        const requestPermission = locationModule?.requestForegroundPermissionsAsync;
-        const getCurrentPosition = locationModule?.getCurrentPositionAsync;
-        const accuracy = locationModule?.Accuracy?.Highest;
-
-        if (!requestPermission || !getCurrentPosition || !accuracy) {
-          throw new Error('expo-location não está disponível neste build.');
-        }
-
-        const { status } = await requestPermission();
-        if (status !== 'granted') {
-          Alert.alert(
-            'Permissão necessária',
-            'Ative sua localização para sugerir locais próximos.'
-          );
-          if (isMounted) {
-            setLocationError('Localização desativada.');
-            setLoading(false);
-          }
-          return;
-        }
-
-        const location = await getCurrentPosition({ accuracy });
-        const { latitude, longitude } = location.coords;
-
-        if (isMounted) {
-          setRegion({
-            latitude,
-            longitude,
-            latitudeDelta: 0.02,
-            longitudeDelta: 0.02,
+          var places = ${markersJson};
+          places.forEach(p => {
+            L.marker([p.location.lat, p.location.lng]).addTo(map)
+              .bindPopup('<b>' + p.name + '</b><br/>' + p.address);
           });
-        }
-
-        const query = encodeURIComponent(activity.query);
-        const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=4000&keyword=${query}&key=${GOOGLE_KEY}`;
-        const response = await fetch(url);
-        const data = await response.json();
-
-        if (isMounted && Array.isArray(data.results)) {
-          setPlaces(data.results.slice(0, 8));
-        }
-      } catch (err) {
-        console.warn(err);
-        if (isMounted) {
-          setLocationError(
-            err instanceof Error
-              ? err.message
-              : 'Não foi possível obter sua localização.'
-          );
-        }
-      } finally {
-        if (isMounted) {
-          setLoading(false);
-        }
-      }
-    })();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [activity.query]);
-
-  const displayPlaces: DisplayPlace[] = useMemo(() => {
-    if (places.length === 0) {
-      return activity.fallback;
-    }
-
-    return places.map((place) => ({
-      id: place.place_id,
-      name: place.name,
-      address: place.vicinity ?? 'Endereço não informado',
-      highlight: place.user_ratings_total
-        ? `${place.user_ratings_total} avaliações`
-        : undefined,
-      rating: place.rating,
-      extra: 'Sugerido pelo Google Maps',
-      location: {
-        lat: place.geometry.location.lat,
-        lng: place.geometry.location.lng,
-      },
-    }));
-  }, [places, activity.fallback]);
-
-  const markers = displayPlaces.filter((p) => p.location);
+        </script>
+      </body>
+    </html>`;
+  }, [markers]);
 
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradient
         style={styles.header}
-        colors={[colors.darkBlue, colors.blue, colors.lightBlue]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
+        colors={[colors.darkBlue, colors.blue, colors.lightBlue]}
       >
-        <TouchableOpacity
-          activeOpacity={0.7}
-          onPress={() => router.back()}
-          style={{ paddingHorizontal: 4 }}
-        >
-          <MaterialIcons name="arrow-back-ios" size={24} color={colors.white} />
+        <TouchableOpacity onPress={() => router.back()}>
+          <MaterialIcons name="arrow-back-ios" size={24} color="#fff" />
         </TouchableOpacity>
         <Text style={styles.title}>{activity.title}</Text>
       </LinearGradient>
@@ -271,76 +195,33 @@ export default function LocaisMeditacao() {
       <View style={styles.main}>
         <Text style={styles.subtitle}>{activity.description}</Text>
 
-        {loading ? (
-          <ActivityIndicator
-            size="large"
-            color={colors.blue}
-            style={{ marginTop: 20 }}
-          />
-        ) : region ? (
-          <MapView
-            style={styles.map}
-            region={region}
-            showsUserLocation
-            loadingEnabled
-          >
-            {markers.map((place) => (
-              <Marker
-                key={place.id}
-                coordinate={{
-                  latitude: place.location!.lat,
-                  longitude: place.location!.lng,
-                }}
-                title={place.name}
-                description={place.address}
-              />
-            ))}
-          </MapView>
-        ) : (
-          <Text style={styles.errorText}>
-            {locationError ?? 'Não foi possível obter sua localização.'}
-          </Text>
-        )}
+        <View style={styles.mapWrapper}>
+          <WebView source={{ html: mapHtml }} />
+        </View>
 
         <View style={styles.listHeader}>
           <Text style={styles.listTitle}>Locais recomendados</Text>
-          {places.length === 0 && (
-            <Text style={styles.listSubtitle}>Mostrando sugestões fixas</Text>
-          )}
         </View>
 
-        <ScrollView
-          style={{ flex: 1 }}
-          contentContainerStyle={{ paddingBottom: 24 }}
-          showsVerticalScrollIndicator={false}
-        >
-          {displayPlaces.map((place) => (
+        <ScrollView>
+          {activity.fallback.map((place) => (
             <TouchableOpacity
               key={place.id}
               style={styles.card}
-              onPress={() => {
+              onPress={() =>
                 router.push({
                   pathname: '/pages/(logado)/categorias/meditacao/horarios',
                   params: {
                     localNome: place.name,
                     localEndereco: place.address,
                   },
-                });
-              }}
+                })
+              }
             >
               <View style={styles.cardHeader}>
                 <Text style={styles.placeName}>{place.name}</Text>
-                {place.rating && (
-                  <View style={styles.ratingPill}>
-                    <MaterialCommunityIcons
-                      name="star"
-                      size={14}
-                      color="#FFB703"
-                    />
-                    <Text style={styles.ratingText}>{place.rating.toFixed(1)}</Text>
-                  </View>
-                )}
               </View>
+
               <Text style={styles.placeAddress}>{place.address}</Text>
               {place.highlight && (
                 <Text style={styles.placeHighlight}>{place.highlight}</Text>
@@ -361,94 +242,67 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 20,
-    paddingHorizontal: 20,
-    paddingVertical: 18,
+    padding: 20,
   },
   title: {
     flex: 1,
     textAlign: 'center',
+    color: '#fff',
     fontSize: 20,
     fontWeight: 'bold',
-    color: colors.white,
   },
-  main: { flex: 1, paddingHorizontal: 20 },
+  main: {
+    flex: 1,
+    paddingHorizontal: 20,
+  },
   subtitle: {
-    fontSize: 16,
-    color: colors.darkGray,
+    padding: 20,
     textAlign: 'center',
-    marginBottom: 20,
+    color: colors.darkGray,
+    
   },
-  map: {
-    width: '100%',
+  mapWrapper: {
     height: 260,
     borderRadius: 16,
-  },
-  errorText: {
-    textAlign: 'center',
-    color: colors.darkGray,
-    marginBottom: 16,
+    overflow: 'hidden',
+    backgroundColor: '#ddd',
+    marginBottom: 18,
   },
   listHeader: {
-    marginTop: 24,
-    marginBottom: 12,
+    marginBottom: 8,
   },
   listTitle: {
     fontSize: 18,
     fontWeight: '600',
     color: colors.darkBlue,
-    textAlign: 'left',
-  },
-  listSubtitle: {
-    fontSize: 12,
-    color: colors.darkGray,
-    marginTop: 4,
   },
   card: {
     backgroundColor: '#f7f9ff',
-    padding: 16,
     borderRadius: 16,
-    marginBottom: 16,
-    borderWidth: 1,
+    padding: 16,
+    marginBottom: 12,
     borderColor: '#e0e5ff',
-  },
-  cardHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    borderWidth: 1,
   },
   placeName: {
-    fontSize: 18,
-    fontWeight: '600',
+    fontSize: 16,
+    fontWeight: '700',
     color: colors.darkBlue,
   },
   placeAddress: {
-    marginTop: 4,
-    fontSize: 14,
+    fontSize: 13,
     color: colors.darkGray,
+    marginTop: 4,
   },
   placeHighlight: {
-    marginTop: 8,
     fontSize: 13,
     color: colors.blue,
+    marginTop: 4,
   },
   placeExtra: {
-    marginTop: 4,
     fontSize: 12,
     color: colors.darkGray,
+    marginTop: 4,
   },
-  ratingPill: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#fff7dd',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 999,
-    gap: 4,
-  },
-  ratingText: {
-    fontSize: 12,
-    color: '#D97706',
-    fontWeight: '600',
-  },
+  cardHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', },
 });

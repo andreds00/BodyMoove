@@ -6,7 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 
-export default function ModalidadesMusculação() {
+export default function ModalidadesMusculacao() {
 
 
   return (
@@ -19,7 +19,7 @@ export default function ModalidadesMusculação() {
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
         >
-          <TouchableOpacity activeOpacity={0.6} onPress={() => router.replace('/pages/(logado)/home/page')}>
+          <TouchableOpacity activeOpacity={0.6} onPress={() => router.back()}>
             <MaterialIcons name="arrow-back-ios" size={24} color={colors.white} />
           </TouchableOpacity>
 
@@ -38,14 +38,14 @@ export default function ModalidadesMusculação() {
 
           <View style={styles.options}>
             <TouchableOpacity style={styles.button1} activeOpacity={0.6} onPress={() => {router.push({
-              pathname: '/pages/(logado)/categorias/musculação/escolhas',
+              pathname: '/pages/(logado)/categorias/musculacao/escolhas',
               params: { atividade: 'crossfit' },
             }) }}>
               <Text style={styles.buttonText}> Crossfit </Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.button2} activeOpacity={0.6} onPress={() => {router.push({
-              pathname: '/pages/(logado)/categorias/musculação/escolhas',
+              pathname: '/pages/(logado)/categorias/musculacao/escolhas',
               params: { atividade: 'musculacao' },
             }) }}>
               

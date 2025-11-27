@@ -6,7 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 
-export default function ModalidadesLutas() {
+export default function ModalidadesSpinning() {
 
 
   return (
@@ -23,7 +23,7 @@ export default function ModalidadesLutas() {
             <MaterialIcons name="arrow-back-ios" size={24} color={colors.white} />
           </TouchableOpacity>
 
-          <Text style={styles.title}>Lutas</Text>
+          <Text style={styles.title}>Spinning</Text>
 
         </LinearGradient>
 
@@ -31,32 +31,23 @@ export default function ModalidadesLutas() {
 
           <View style={{ width: "100%", justifyContent: 'center', marginTop: 20 }}>
             <Text style={styles.subtitle}>
-              Selecione a categoria de lutas que deseja praticar:
+              Selecione a categoria de spinning que deseja praticar:
             </Text>
           </View>
 
 
           <View style={styles.options}>
-            <TouchableOpacity style={styles.button1} activeOpacity={0.6} onPress={() => { router.replace({
-              pathname: '/pages/(logado)/categorias/lutas/escolhas',
-              params: { atividade: 'muay-thai' },
-            }) }}>
-              <Text style={styles.buttonText}> Muay Thai</Text>
+            <TouchableOpacity style={styles.button1} activeOpacity={0.6} onPress={() => {}}>
+              <Text style={styles.buttonText}> Treino de Intensidade </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button2} activeOpacity={0.6} onPress={() => { router.replace({
-              pathname: '/pages/(logado)/categorias/lutas/escolhas',
-              params: { atividade: 'karate' },
-            }) }}>
+            <TouchableOpacity style={styles.button2} activeOpacity={0.6} onPress={() => { router}}>
               
-              <Text style={styles.buttonText}>Karatê </Text>
+              <Text style={styles.buttonText}> Treino de HIIT </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button3} activeOpacity={0.6} onPress={() => { router.replace({
-              pathname: '/pages/(logado)/categorias/lutas/escolhas',
-              params: { atividade: 'wrestling' },
-            }) }} >
-              <Text style={styles.buttonText}> Wrestling</Text>
+            <TouchableOpacity style={styles.button3} activeOpacity={0.6} onPress={() => { }}>
+              <Text style={styles.buttonText}> Treino de Velocidade </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -99,7 +90,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: '300',
     color: colors.darkBlue,
     marginBottom: 10,
     textAlign: 'center',

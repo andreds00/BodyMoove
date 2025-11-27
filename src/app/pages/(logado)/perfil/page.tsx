@@ -81,7 +81,7 @@ export default function Perfil() {
                         <MaterialIcons name="keyboard-arrow-right" size={24} color="#9097B2" />
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.menuItem}>
+                    <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/pages/(logado)/notificacao/page')}>
                         <Ionicons name="notifications-outline" size={24} color="#9097B2" />
                         <Text style={styles.menuText}>Notificações</Text>
                         <MaterialIcons name="keyboard-arrow-right" size={24} color="#9097B2" />

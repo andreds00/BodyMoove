@@ -2,6 +2,8 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
+import { LinearGradient } from 'expo-linear-gradient';
+import colors from '@/constants/Colors';
 
 export default function ConfirmacaoMeditacao() {
   const router = useRouter();
@@ -19,47 +21,58 @@ export default function ConfirmacaoMeditacao() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.background}>
-        <View style={styles.content}>
-          <Text style={styles.message}>
-            Parabéns por confirmar sua aula de{"\n"}
-            <Text style={styles.bold}>Meditação {nivel ? `(${nivel})` : ''}</Text> no{" "}
-            <Text style={styles.bold}>{localNome}</Text>
-            {localEndereco ? `\n${localEndereco}` : ''}
-            {"\n"}às <Text style={styles.bold}>{horario}!</Text>
-          </Text>
 
-          <View style={styles.detailsContainer}>
-            <View style={styles.detailRow}>
-              <Text style={styles.detailLabel}>Local:</Text>
-              <Text style={styles.detailValue}>{localNome}</Text>
-            </View>
-            {localEndereco && (
+      <LinearGradient
+        style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}
+        colors={[colors.darkBlue, colors.blue, colors.lightBlue]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 0 }}
+      >
+        <View style={styles.background}>
+          <View style={styles.content}>
+            <Text style={styles.message}>
+              Parabéns por confirmar sua aula de 
+              <Text style={styles.bold}>
+               {""} Meditação!
+              </Text>
+            </Text>
+
+            <View style={styles.detailsContainer}>
               <View style={styles.detailRow}>
-                <Text style={styles.detailLabel}>Endereço:</Text>
-                <Text style={styles.detailValue}>{localEndereco}</Text>
+                <Text style={styles.detailLabel}>Local:</Text>
+                <Text style={styles.detailValue}>{localNome}</Text>
               </View>
-            )}
-            <View style={styles.detailRow}>
-              <Text style={styles.detailLabel}>Horário:</Text>
-              <Text style={styles.detailValue}>{horario}</Text>
-            </View>
-            {nivel && (
+
+              {localEndereco !== '' && (
+                <View style={styles.detailRow}>
+                  <Text style={styles.detailLabel}>Endereço:</Text>
+                  <Text style={styles.detailValue}>{localEndereco}</Text>
+                </View>
+              )}
+
               <View style={styles.detailRow}>
-                <Text style={styles.detailLabel}>Nível:</Text>
-                <Text style={styles.detailValue}>{nivel}</Text>
+                <Text style={styles.detailLabel}>Horário:</Text>
+                <Text style={styles.detailValue}>{horario}</Text>
               </View>
-            )}
+
+              {nivel !== '' && (
+                <View style={styles.detailRow}>
+                  <Text style={styles.detailLabel}>Nível:</Text>
+                  <Text style={styles.detailValue}>{nivel}</Text>
+                </View>
+              )}
+              <Text style={styles.confiraEmail}>Confira o seu e-mail</Text>
+            </View>
+
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => router.replace('/pages/(logado)/home/page')}
+            >
+              <Text style={styles.buttonText}>Fechar</Text>
+            </TouchableOpacity>
           </View>
-
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => router.replace('/pages/(logado)/home/page')}
-          >
-            <Text style={styles.buttonText}>Fechar</Text>
-          </TouchableOpacity>
         </View>
-      </View>
+      </LinearGradient>
     </SafeAreaView>
   );
 }
@@ -67,10 +80,9 @@ export default function ConfirmacaoMeditacao() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: colors.darkBlue
   },
   background: {
-    flex: 1,
-    backgroundColor: '#003973',
     justifyContent: 'center',
   },
   content: {
@@ -79,7 +91,7 @@ const styles = StyleSheet.create({
   },
   message: {
     color: '#fff',
-    fontSize: 20,
+    fontSize: 23,
     textAlign: 'center',
     marginBottom: 30,
     lineHeight: 30,
@@ -111,14 +123,25 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   button: {
+    marginTop: 20,
     backgroundColor: '#fff',
     paddingVertical: 12,
     paddingHorizontal: 40,
     borderRadius: 25,
+    width: '100%'
   },
   buttonText: {
+    textAlign: 'center',
     color: '#003973',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  confiraEmail: {
+    marginTop: 10,
+    textAlign:'center',
+    color: colors.white,
     fontSize: 16,
     fontWeight: '600',
+
   },
 });

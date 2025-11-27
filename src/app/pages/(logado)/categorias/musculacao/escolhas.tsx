@@ -288,7 +288,7 @@ export default function LocaisMeditacao() {
               style={styles.card}
               onPress={() => {
                 router.push({
-                  pathname: '/pages/(logado)/categorias/musculação/horarios',
+                  pathname: '/pages/(logado)/categorias/musculacao/horarios',
                   params: {
                     localNome: place.name,
                     localEndereco: place.address,

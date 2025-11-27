@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, ScrollView } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import colors from '@/constants/Colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -19,7 +19,7 @@ export default function ModalidadesDanca() {
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
         >
-          <TouchableOpacity activeOpacity={0.6} onPress={() => router.replace('/pages/(logado)/home/page')}>
+          <TouchableOpacity activeOpacity={0.6} onPress={() => router.back()}>
             <MaterialIcons name="arrow-back-ios" size={24} color={colors.white} />
           </TouchableOpacity>
 
@@ -27,46 +27,56 @@ export default function ModalidadesDanca() {
 
         </LinearGradient>
 
-        <View style={styles.main}>
+        <ScrollView style={{ flexGrow: 1, backgroundColor: colors.white }} >
+          <View style={styles.main}>
 
-          <View style={{ width: "100%", justifyContent: 'center', marginTop: 20 }}>
-            <Text style={styles.subtitle}>
-              Selecione a categoria de dança que deseja praticar:
-            </Text>
+            <View style={{ width: "100%", justifyContent: 'center', marginTop: 20 }}>
+              <Text style={styles.subtitle}>
+                Selecione a categoria de dança que deseja praticar:
+              </Text>
+            </View>
+
+
+            <View style={styles.options}>
+              <TouchableOpacity style={styles.button1} activeOpacity={0.6} onPress={() => {
+                router.replace({
+                  pathname: '/pages/(logado)/categorias/danca/escolhas',
+                  params: { atividade: 'zumba' },
+                })
+              }}>
+                <Text style={styles.buttonText}> Zumba </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.button2} activeOpacity={0.6} onPress={() => {
+                router.replace({
+                  pathname: '/pages/(logado)/categorias/danca/escolhas',
+                  params: { atividade: 'jazz' },
+                })
+              }}>
+
+                <Text style={styles.buttonText}> Jazz </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.button3} activeOpacity={0.6} onPress={() => {
+                router.replace({
+                  pathname: '/pages/(logado)/categorias/danca/escolhas',
+                  params: { atividade: 'barre-fit' },
+                })
+              }}>
+                <Text style={styles.buttonText}> Barre Fit </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.button3} activeOpacity={0.6} onPress={() => {
+                router.replace({
+                  pathname: '/pages/(logado)/categorias/danca/escolhas',
+                  params: { atividade: 'fit-dance' },
+                })
+              }}>
+                <Text style={styles.buttonText}>Fit Dance</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-
-
-          <View style={styles.options}>
-            <TouchableOpacity style={styles.button1} activeOpacity={0.6} onPress={() => { router.replace({
-              pathname: '/pages/(logado)/categorias/danca/escolhas',
-              params: { atividade: 'zumba' },
-            }) }}>
-              <Text style={styles.buttonText}> Zumba </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.button2} activeOpacity={0.6} onPress={() => { router.replace({
-              pathname: '/pages/(logado)/categorias/danca/escolhas',
-              params: { atividade: 'jazz' },
-            }) }}>
-              
-              <Text style={styles.buttonText}> Jazz </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.button3} activeOpacity={0.6} onPress={() => { router.replace({
-              pathname: '/pages/(logado)/categorias/danca/escolhas',
-              params: { atividade: 'barre-fit' },
-            }) }}>
-              <Text style={styles.buttonText}> Barre Fit </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.button3} activeOpacity={0.6} onPress={() => { router.replace({
-              pathname: '/pages/(logado)/categorias/danca/escolhas',
-              params: { atividade: 'fit-dance' },
-            }) }}>
-              <Text style={styles.buttonText}>Fit Dance</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
+        </ScrollView>
       </View>
 
     </SafeAreaView >
@@ -83,7 +93,7 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: "row",
     alignContent: "center",
-    marginBottom: 20,
+    
     paddingHorizontal: 20,
     paddingVertical: 18,
     alignItems: 'center',
@@ -102,9 +112,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: "5%",
     paddingHorizontal: 20,
+    marginBottom: '20%'
 
   },
   subtitle: {
+    paddingTop: 20,
     fontSize: 18,
     fontWeight: '600',
     color: colors.darkBlue,
@@ -117,7 +129,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     alignItems: 'center',
   },
-  button2: { 
+  button2: {
     width: '100%',
     backgroundColor: colors.blue,
     paddingVertical: 65,

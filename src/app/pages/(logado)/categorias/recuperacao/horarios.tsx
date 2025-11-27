@@ -52,7 +52,7 @@ export default function HorariosMeditacao() {
           <Link
             key={index}
             href={{
-              pathname: '/pages/(logado)/categorias/volei/confimacao/page',
+              pathname: '/pages/(logado)/categorias/recuperacao/confimacao/page',
               params: {
                 localNome: params.localNome || 'Local não informado',
                 localEndereco: params.localEndereco || '',

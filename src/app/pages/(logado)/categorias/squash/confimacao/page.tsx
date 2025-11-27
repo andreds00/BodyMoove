@@ -33,7 +33,7 @@ export default function ConfirmacaoMeditacao() {
             <Text style={styles.message}>
               Parabéns por confirmar sua aula de 
               <Text style={styles.bold}>
-               {""} Basquete!
+               {""} Squash!
               </Text>
             </Text>
 

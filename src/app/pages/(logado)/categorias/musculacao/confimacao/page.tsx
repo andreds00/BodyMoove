@@ -31,9 +31,9 @@ export default function ConfirmacaoMeditacao() {
         <View style={styles.background}>
           <View style={styles.content}>
             <Text style={styles.message}>
-              Parabéns por confirmar sua aula de 
+              Parabéns por confirmar seu treino de
               <Text style={styles.bold}>
-               {""} Basquete!
+               {""} Musculação!
               </Text>
             </Text>
 

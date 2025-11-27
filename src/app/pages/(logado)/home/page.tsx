@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
-import { MaterialIcons } from '@expo/vector-icons';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import {
   BottomSheetModal,
@@ -36,7 +36,7 @@ type SupabaseRow = {
 export default function Home() {
   const { user, userData } = useAuth();
   const bottomSheetRef = useRef<BottomSheetModal | null>(null);
-  const snapPoints = useMemo<string[]>(() => ['30%', '80%'], []);
+  const snapPoints = useMemo<string[]>(() => ['30%', '88%'], []);
 
   const handlePresentModalPress = useCallback(() => {
     bottomSheetRef.current?.present?.();
@@ -210,7 +210,7 @@ export default function Home() {
 
                     <View style={styles.modalidadesContainer}>
                       <View style={{ width: "100%", padding: "4%", flexDirection: 'row', flexWrap: 'wrap', justifyContent: "space-around", alignItems: 'center', gap: 9.5 }}>
-                        {/* seus botões de categorias (mantidos) */}
+
                         <TouchableOpacity style={styles.modalidades} activeOpacity={0.7} onPress={() => { router.push('/pages/(logado)/categorias/volei/page') }}>
                           <MaterialIcons style={styles.modalidadesIcon} name='sports-volleyball' size={40} color="white" />
                           <Text style={styles.modalidadesText}>Vôlei</Text>
@@ -267,29 +267,30 @@ export default function Home() {
                           <Text style={styles.modalidadesText}>Corrida</Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.modalidades} activeOpacity={0.7} onPress={() => { /* placeholder */ }}>
-                          <MaterialIcons style={styles.modalidadesIcon} name='chair' size={38} color="white" />
-                          <Text style={styles.modalidadesText}>Descanso</Text>
+                        <TouchableOpacity style={styles.modalidades} activeOpacity={0.7} onPress={() => { router.push('/pages/(logado)/categorias/recuperacao/page') }}>
+                          <Ionicons style={styles.modalidadesIcon} name="medkit" size={38} color={colors.white} />
+                          <Text style={styles.modalidadesText}>Recuperação</Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.modalidades} activeOpacity={0.7} onPress={() => { /* placeholder */ }}>
+                        <TouchableOpacity style={styles.modalidades} activeOpacity={0.7} onPress={() => { router.push('/pages/(logado)/categorias/circo/page') }}>
                           <View style={styles.modalidadesImageContainer}>
                             <Image style={styles.modalidadesImage} source={require('@/assets/images/circo.png')} />
                           </View>
                           <Text style={styles.modalidadesText}>Circo</Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.modalidades} activeOpacity={0.7} onPress={() => { /* placeholder */ }}>
+                        <TouchableOpacity style={styles.modalidades} activeOpacity={0.7} onPress={() => { router.push('/pages/(logado)/categorias/squash/page') }}>
                           <MaterialIcons style={styles.modalidadesIcon} name='sports-cricket' size={38} color="white" />
                           <Text style={styles.modalidadesText}>Squash</Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.modalidades} activeOpacity={0.7} onPress={() => { /* placeholder */ }}>
+                        <TouchableOpacity style={styles.modalidades} activeOpacity={0.7} onPress={() => { router.push('/pages/(logado)/categorias/musculacao/page') }}>
                           <MaterialIcons style={styles.modalidadesIcon} name='fitness-center' size={38} color="white" />
+
                           <Text style={styles.modalidadesText}>Musculação</Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.modalidades} activeOpacity={0.7} onPress={() => { /* placeholder */ }}>
+                        <TouchableOpacity style={styles.modalidades} activeOpacity={0.7} onPress={() => { router.push('/pages/(logado)/categorias/patinacao/page') }}>
                           <MaterialIcons style={styles.modalidadesIcon} name='ice-skating' size={38} color="white" />
                           <Text style={styles.modalidadesText}>Patinação</Text>
                         </TouchableOpacity>
@@ -320,12 +321,13 @@ export default function Home() {
                   </View>
                 </View>
 
-                <View style={styles.ultimoTreino}>
+                <LinearGradient style={styles.ultimoTreino} colors={[colors.darkBlue, colors.blue, colors.lightBlue]} start={{ x: 0, y: 1 }} end={{ x: 1, y: 0 }}>
                   {loadingLast ? (
                     <Text style={styles.ultimoTreinoText}>Carregando último treino...</Text>
                   ) : lastError ? (
                     <Text style={styles.ultimoTreinoText}>Erro: {lastError}</Text>
                   ) : lastWorkout ? (
+
                     <TouchableOpacity
                       activeOpacity={0.8}
                       style={{ width: '100%' }}
@@ -336,21 +338,21 @@ export default function Home() {
                         })
                       }
                     >
-                      <View style={[styles.dataUltimoTreino, { backgroundColor: colors.darkBlue }]}>
+                      <View style={[styles.dataUltimoTreino, { borderWidth: 2, borderColor: colors.white }]}>
                         <Text style={styles.dataUltimoTreinoText}>{formatDateHuman(lastWorkout.data, lastWorkout.horario)}</Text>
                       </View>
 
                       <View style={styles.descricaoUltimoTreino}>
                         <View style={{ flex: 1 }}>
-                          <Text style={[styles.km, { color: colors.darkBlue }]}>{lastWorkout.esporte ?? 'Treino'}</Text>
-                          {lastWorkout.horario ? <Text style={{ color: colors.darkGray }}>{lastWorkout.horario}</Text> : null}
+                          <Text style={[styles.km, { color: colors.white }]}>{lastWorkout.esporte ?? 'Treino'}</Text>
+                          {lastWorkout.horario ? <Text style={{ color: colors.lightGray }}>Ultimo treino</Text> : null}
                         </View>
                       </View>
                     </TouchableOpacity>
                   ) : (
                     <Text style={styles.ultimoTreinoText}>Você ainda não fez nenhum treino.</Text>
                   )}
-                </View>
+                </LinearGradient>
 
                 <View style={styles.containerButtons}>
                   <TouchableOpacity activeOpacity={0.6} style={styles.buttonTreinosMetas} onPress={() => router.push('/pages/(logado)/historicoTreinos/page')}>
@@ -527,7 +529,7 @@ const styles = StyleSheet.create({
   },
   ultimoTreinoText: {
     fontSize: 15,
-    color: colors.darkGray,
+    color: colors.lightGray,
     textAlign: "center",
   },
   dataUltimoTreino: {
@@ -555,6 +557,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     fontWeight: "bold",
     fontSize: 20,
+    paddingBottom: 20,
     color: colors.white,
   },
   containerButtons: {
@@ -577,7 +580,7 @@ const styles = StyleSheet.create({
     color: colors.darkBlue,
   },
   titleBottomSheet: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: 'bold',
     color: colors.white,
     marginTop: 10,
@@ -589,19 +592,23 @@ const styles = StyleSheet.create({
     height: "13%",
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 10,
+
+
   },
   modalidadesContainer: {
     flex: 1,
     width: '100%',
-    padding: 16,
+    padding: 10,
   },
   modalidades: {
-    width: 70,
+    width: 90,
     height: 70,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: "10%",
+
+
   },
   modalidadesIcon: {
     marginBottom: 4,
@@ -613,15 +620,19 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     textAlignVertical: 'center',
     color: colors.white,
+
+
   },
   modalidadesImage: {
     width: 40,
     height: 40,
+
     textAlign: 'center',
     textAlignVertical: 'center',
+
   },
   modalidadesImageContainer: {
-    width: 70,
+    width: 90,
     height: 70,
     justifyContent: 'center',
     alignItems: 'center',
@@ -630,10 +641,13 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     padding: 10,
   },
+
   modalidadesText: {
     textAlign: 'center',
     fontSize: 14,
     color: colors.darkBlue,
     fontWeight: 'bold',
+
+
   },
 });

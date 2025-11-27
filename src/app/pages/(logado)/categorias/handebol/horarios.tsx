@@ -6,51 +6,55 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialIcons } from '@expo/vector-icons';
 import colors from '@/constants/Colors';
 
-export default function HorariosHandebol() {
+export default function HorariosMeditacao() {
   const router = useRouter();
   const params = useLocalSearchParams<{ localNome?: string; localEndereco?: string }>();
-
+  
   const horarios = [
-    { hora: '08h00', nivel: 'iniciante' },
-    { hora: '09h30', nivel: 'intermediário' },
-    { hora: '11h00', nivel: 'avançado' },
-    { hora: '14h00', nivel: 'intermediário' },
-    { hora: '16h30', nivel: 'iniciante' },
-    { hora: '19h00', nivel: 'avançado' },
+    { hora: '7h00', nivel: 'iniciante' },
+    { hora: '9h20', nivel: 'intermediário' },
+    { hora: '10h00', nivel: 'intermediária' },
+    { hora: '17h30', nivel: 'avançado' },
+    { hora: '18h00', nivel: 'iniciante' },
+    { hora: '20h30', nivel: 'iniciante' },
   ];
 
   return (
     <SafeAreaView style={styles.container}>
-      <LinearGradient
+      <View
         style={styles.header}
-        colors={[colors.darkBlue, colors.blue, colors.lightBlue]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 0 }}
-      >
-        <TouchableOpacity onPress={() => router.back()}>
-          <MaterialIcons name="arrow-back-ios" size={24} color={colors.white} />
-        </TouchableOpacity>
-        <Text style={styles.title}>Agende seu horário</Text>
-      </LinearGradient>
 
-      <Text style={styles.subtitle}>Escolha o melhor horário e nível da partida</Text>
+      >
+        <TouchableOpacity
+          activeOpacity={0.7}
+          onPress={() => router.back()}
+          style={{ paddingHorizontal: 4 }}
+        >
+          <MaterialIcons name="arrow-back-ios" size={24} color={colors.darkBlue} />
+        </TouchableOpacity>
+        <Text style={styles.title}>Escolha o horario</Text>
+      </View>
+
+      <Text style={styles.subtitle}>Escolha o melhor horario e nível da sua aula</Text>
 
       {params.localNome && (
         <View style={styles.localInfo}>
-          <Text style={styles.localLabel}>Quadra selecionada</Text>
+          <Text style={styles.localLabel}>Local escolhido:</Text>
           <Text style={styles.localNome}>{params.localNome}</Text>
-          {!!params.localEndereco && <Text style={styles.localEndereco}>{params.localEndereco}</Text>}
+          {params.localEndereco && (
+            <Text style={styles.localEndereco}>{params.localEndereco}</Text>
+          )}
         </View>
       )}
 
       <ScrollView contentContainerStyle={styles.options}>
         {horarios.map((item, index) => (
           <Link
-            key={`${item.hora}-${index}`}
+            key={index}
             href={{
               pathname: '/pages/(logado)/categorias/handebol/confimacao/page',
               params: {
-                localNome: params.localNome || 'Quadra não informada',
+                localNome: params.localNome || 'Local não informado',
                 localEndereco: params.localEndereco || '',
                 horario: item.hora,
                 nivel: item.nivel,
@@ -75,74 +79,86 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
   },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    width: '100%',
+    flexDirection: "row",
+    alignContent: "center",
+    marginBottom: 20,
     paddingHorizontal: 20,
     paddingVertical: 18,
-    marginBottom: 12,
+    alignItems: 'center',
+
   },
   title: {
-    flex: 1,
-    textAlign: 'center',
+    width: '90%',
+    textAlign: "center",
     fontSize: 20,
-    fontWeight: 'bold',
-    color: colors.white,
+    fontWeight: "bold",
+    color: colors.darkBlue,
+    alignSelf: "center",
   },
   subtitle: {
     fontSize: 16,
+    fontWeight: '600',
     color: colors.darkGray,
+    marginBottom: 10,
     textAlign: 'center',
-    marginBottom: 12,
-    paddingHorizontal: 20,
+    padding: 20,
+    paddingVertical: 30,
   },
   localInfo: {
-    marginHorizontal: 20,
-    marginBottom: 12,
-    padding: 16,
     backgroundColor: '#f0f4ff',
+    padding: 16,
+    marginHorizontal: 20,
+    marginBottom: 20,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#d9e1ff',
+    borderColor: '#D9D9D9',
   },
   localLabel: {
     fontSize: 12,
     color: colors.darkGray,
-    textTransform: 'uppercase',
+    marginBottom: 4,
+    fontWeight: '600',
   },
   localNome: {
-    fontSize: 16,
-    fontWeight: '600',
     color: colors.darkBlue,
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 4,
   },
   localEndereco: {
-    fontSize: 13,
-    color: colors.darkGray,
-    marginTop: 4,
-  },
-  options: {
-    paddingHorizontal: 20,
-    paddingBottom: 30,
-    gap: 14,
-  },
-  button: {
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: '#d9e1ff',
-    paddingVertical: 14,
-    paddingHorizontal: 20,
-    backgroundColor: '#f8faff',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  hora: {
-    color: colors.darkBlue,
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  nivel: {
     color: colors.darkGray,
     fontSize: 14,
-    textTransform: 'capitalize',
+  },
+
+  options: {
+    gap: 20,
+    paddingHorizontal: 20,
+    width: '100%',
+
+  },
+  button: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    padding: 15,
+    borderWidth: 1,
+    borderColor: '#D9D9D9',
+    borderRadius: 30,
+    marginBottom: 12,
+    marginTop: 10,
+    justifyContent: 'center',
+  },
+  hora: {
+    marginLeft: 10,
+    fontSize: 18,
+    color: colors.darkBlue,
+    fontWeight: 'bold',
+
+  },
+  nivel: {
+    marginLeft: 10,
+    fontSize: 10,
+    color: colors.darkGray,
+    fontWeight: 'bold',
   },
 });
-

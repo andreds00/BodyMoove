@@ -522,7 +522,7 @@ export default function MeusTreinos() {
       </View>
 
       <TouchableOpacity style={styles.btnScan} onPress={startScan}>
-        <Text style={styles.btnScanText}>🔍 Buscar novamente</Text>
+        <Text style={styles.btnScanText}> Buscar novamente</Text>
       </TouchableOpacity>
     </>
   );

@@ -19,7 +19,7 @@ export default function ModalidadesMeditacao() {
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
         >
-          <TouchableOpacity activeOpacity={0.6} onPress={() => router.replace('/pages/(logado)/home/page')}>
+          <TouchableOpacity activeOpacity={0.6} onPress={() => router.back()}>
             <MaterialIcons name="arrow-back-ios" size={24} color={colors.white} />
           </TouchableOpacity>
 

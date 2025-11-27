@@ -130,7 +130,7 @@ O desenvolvimento seguiu conceitos de:
 ![Home](./assets/screenshots/home.jpg)
 
 ### Categorias de Atividades
-![Categorias](./assets/screenshots/EscolhaCAtegoria.jpg)
+![Categorias](./assets/screenshots/categorias.jpg)
 
 ### Agenda / Meus Treinos
 ![Meus Treinos](./assets/screenshots/meusTreinos.jpg)

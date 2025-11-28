@@ -7,7 +7,8 @@
 - Beatriz Salino  
 - Darlene Passos  
 - Kaique Guilherme  
-- Marília de Mattos  
+- Marília de Mattos
+- Renan Mendes 
 - Sofia Regina  
 
 ### Curso
@@ -17,7 +18,8 @@ Desenvolvimento de Sistemas
 SENAI
 
 ### Orientador
-Thier Alarcon
+- Thier Alarcon
+- Lucas Gonzalez
 
 ---
 

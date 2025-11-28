@@ -15,7 +15,7 @@
 Desenvolvimento de Sistemas
 
 ### Instituição
-SENAI
+Faculdade SENAI "Naldir Dias de Figueiredo" - 119
 
 ### Orientador
 - Thier Alarcon
